@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/usr/bin/bash
 # CJL; (cjl2007@med.cornell.edu)
 # note: this script is a wrapper for the HCP's anatomical preprocessing pipeline; 
 
-StudyFolder=$1 # location of Subject folder
+OrigStudyFolder=$1 # location of Subject folder
 Subject=$2 # space delimited list of subject IDs
 export NSLOTS=$3 # set number of cores for FreeSurfer
 
@@ -11,8 +11,25 @@ if [ "${StudyFolder: -1}" = "/" ]; then
 	StudyFolder=${StudyFolder%?};
 fi
 
+# make study folder in lscratch with symlinks to unprocessed data
+[[ -d "/lscratch/${SLURM_JOB_ID}" ]] || exit 101
+StudyFolder=/lscratch/$SLURM_JOB_ID/studyfolder
+mkdir -p ${StudyFolder}/${Subject}/anat
+mkdir -p ${StudyFolder}/${Subject}/func
+ln -sfn ${OrigStudyFolder}/${Subject}/field_maps ${StudyFolder}/${Subject}/field_maps
+ln -sfn ${OrigStudyFolder}/${Subject}/anat/unprocessed ${StudyFolder}/${Subject}/anat/unprocessed
+ln -sfn ${OrigStudyFolder}/${Subject}/func/unprocessed ${StudyFolder}/${Subject}/func/unprocessed
+
+# setup mcr
+ver=v93
+mcr=/usr/local/matlab-compiler/${ver}.tar.gz
+[[ -e "$mcr" ]] || exit 100
+[[ -d "/lscratch/$SLURM_JOB_ID" ]] || exit 101
+
+tar -C /lscratch/$SLURM_JOB_ID -xzf "$mcr"
+
 # Set variable value that sets up environment
-EnvironmentScript="/home/charleslynch/HCPpipelines-master/Examples/Scripts/SetUpHCPPipeline.sh" # Pipeline environment script; users need to set this 
+EnvironmentScript="/data/MLDSST/nielsond/target_test/other_repos/HCPpipelines/Examples/Scripts/SetUpHCPPipeline.sh" # Pipeline environment script; users need to set this 
 source ${EnvironmentScript}	# Set up pipeline environment variables and software
 PRINTCOM="" # If PRINTCOM is not a null or empty string variable, then this script and other scripts that it calls will simply print out the primary commands it otherwise would run. This printing will be done using the command specified in the PRINTCOM variable
 
@@ -56,7 +73,7 @@ rm -rf ${StudyFolder}/${Subject}/MNINonLinear > /dev/null 2>&1
 
 # build list of full paths to T1w images; 
 T1ws=`ls ${StudyFolder}/${Subject}/anat/unprocessed/T1w/T1w*.nii.gz`
-
+echo $T1ws
 T1wInputImages="" # preallocate 
 
 # find all 
@@ -75,7 +92,7 @@ for i in $T2ws ; do
 	T2wInputImages=`echo "${T2wInputImages}$i@"`
 done
 
-# determine if T2w images exist & 
+# determine if T2w images exist &
 # adjust "processing mode" accordingly
 if [ "$T2wInputImages" = "" ]; then
 	T2wInputImages="NONE" # script will proceed in "legacy" mode
@@ -87,9 +104,11 @@ fi
 # make "QA" folder;
 mkdir ${StudyFolder}/${Subject}/qa/ > /dev/null 2>&1 
 
+# 
+
 echo -e "\nRunning PreFreeSurferPipeline" 
 
-# run the Pre FreeSurfer pipeline;
+# # run the Pre FreeSurfer pipeline;
 ${HCPPIPEDIR}/PreFreeSurfer/PreFreeSurferPipeline.sh \
 --path="$StudyFolder" \
 --subject="$Subject" \
@@ -138,6 +157,10 @@ fi
 
 echo -e "Running FreeSurferPipeline" 
 
+echo ${HCPPIPEDIR}/FreeSurfer/FreeSurferPipeline.sh
+
+export PATH=${HCPPIPEDIR}/FreeSurfer/custom:$PATH
+
 # run the FreeSurfer pipeline;
 ${HCPPIPEDIR}/FreeSurfer/FreeSurferPipeline.sh \
 --subject="$Subject" \
@@ -179,3 +202,7 @@ ${HCPPIPEDIR}/PostFreeSurfer/PostFreeSurferPipeline.sh \
 mv ${StudyFolder}/${Subject}/T*w/ ${StudyFolder}/${Subject}/anat/ # T1w & T2w folders
 mv ${StudyFolder}/${Subject}/MNINonLinear/ ${StudyFolder}/${Subject}/anat/ # MNINonLinear folder
 mv ${StudyFolder}/${Subject}/qa/ ${StudyFolder}/${Subject}/anat/
+
+# rsync back to origstudyfolder
+rsync -ach --no-links ${StudyFolder}/${Subject}/anat/ ${OrigStudyFolder}/${Subject}/anat/
+chown -R :EDB ${OrigStudyFolder}/${Subject}/anat/
