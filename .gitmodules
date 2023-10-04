@@ -1,3 +1,6 @@
 [submodule "Res0urces/PFM/MSCcodebase"]
 	path = Res0urces/PFM/MSCcodebase
 	url = https://github.com/MidnightScanClub/MSCcodebase
+[submodule "Res0urces/jsonlab"]
+	path = Res0urces/jsonlab
+	url = https://github.com/fangq/jsonlab.git
