@@ -16,7 +16,7 @@ if StartSession == 1
     ap = dir([Subdir '/func/unprocessed/field_maps/AP*.nii.gz']);
     pa = dir([Subdir '/func/unprocessed/field_maps/PA*.nii.gz']);
     system(['echo Number of AP Field Maps: ' num2str(length(ap)) ' > ' Subdir '/func/qa/AvgFieldMap.txt']);
-    system(['echo Number of PA Field Maps: ' num2str(length(ap)) ' >> ' Subdir '/func/qa/AvgFieldMap.txt']);
+    system(['echo Number of PA Field Maps: ' num2str(length(pa)) ' >> ' Subdir '/func/qa/AvgFieldMap.txt']);
     
     % sweep the
     % ap field maps;
