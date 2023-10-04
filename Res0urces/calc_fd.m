@@ -5,13 +5,14 @@ nyq = (1/tr)/2;
 
 % create a tailored
 % stop band filter;
-stopband = [0.2 (nyq-0.02)];
-[B,A] = butter(10,stopband/nyq,'stop');
-
-% apply stopband filter 
-for i = 1:size(rp,2)
-    rp(:,i) = filtfilt(B,A,rp(:,i));
+% if the top of the stop band is >= 1, need to bump it down a bit
+if nyq <= 0.2
+    stopband = [(nyq-0.00001) (nyq-0.019)];
+else
+    stopband = [0.2 (nyq-0.019)];
 end
+
+[B,A] = butter(10,stopband/nyq,'stop'); 
 
 % calc. backward difference;
 n_trs = round(2.5 / tr);
