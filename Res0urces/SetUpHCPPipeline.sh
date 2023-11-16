@@ -6,7 +6,7 @@ SAVEHCPPIPE="${HCPPIPEDIR:-}"
 ## Edit this line: environment variable for location of HCP Pipeline repository
 ## If you leave it blank, and $HCPPIPEDIR already exists in the environment,
 ## that will be used instead (via the SAVEHCPPIPE variable, defined above)
-export HCPPIPEDIR=/data/MLDSST/nielsond/target_test/other_repos/HCPpipelines
+export HCPPIPEDIR="/opt/HCPpipelines-4.7.0/HCPpipelines"
 
 # Don't edit this section, it allows sourcing SetUp... without editing it if you set things in advance
 if [[ -z "$HCPPIPEDIR" ]]
@@ -20,25 +20,26 @@ then
 fi
 
 ## Edit this section: set up other environment variables
-export MSMBINDIR="/data/MLDSST/nielsond/target_test/other_repos/MSM"
-export MATLAB_COMPILER_RUNTIME="/lscratch/$SLURM_JOB_ID/v93"
-export FSL_FIXDIR=/data/MLDSST/nielsond/target_test/other_repos/fix
+export MSMBINDIR="/opt/MSM"
+#export MATLAB_COMPILER_RUNTIME="/lscratch/$SLURM_JOB_ID/v93"
+export FSL_FIXDIR=/opt/fix
 # If a suitable version of wb_command is on your $PATH, CARET7DIR can be blank
 export CARET7DIR=
 export HCPCIFTIRWDIR="$HCPPIPEDIR"/global/matlab/cifti-matlab
 
 ## Set up FSL (if not already done so in the running environment)
 ## Uncomment the following 2 lines (remove the leading #) and correct the FSLDIR setting for your setup
-#export FSLDIR=/usr/local/fsl
-#source "$FSLDIR/etc/fslconf/fsl.sh"
+export FSLDIR=/opt/fsl
+source "$FSLDIR/etc/fslconf/fsl.sh"
 
 ## Let FreeSurfer explicitly know what version of FSL to use (this shouldn't need changing)
 export FSL_DIR="${FSLDIR}"
 
 ## Set up FreeSurfer (if not already done so in the running environment)
 ## Uncomment the following 2 lines (remove the leading #) and correct the FREESURFER_HOME setting for your setup
-#export FREESURFER_HOME=/usr/local/bin/freesurfer
-#source ${FREESURFER_HOME}/SetUpFreeSurfer.sh > /dev/null 2>&1
+
+export FREESURFER_HOME=/opt/freesurfer
+source ${FREESURFER_HOME}/SetUpFreeSurfer.sh > /dev/null 2>&1
 
 # If you want to use MSM Configuration files other than those already provided, can change the following
 export MSMCONFIGDIR="${HCPPIPEDIR}/MSMConfig"
