@@ -48,8 +48,8 @@ MaxRestarts=5
 
 # set variable value that sets up environment
 EnvironmentScript="/opt/HCPpipelines-4.7.0/Examples/Scripts/SetUpHCPPipeline.sh" # Pipeline environment script; users need to set this 
-source ${EnvironmentScript}	# Set up pipeline environment variables and software
-
+#source ${EnvironmentScript}	# Set up pipeline environment variables and software
+source "$HCPPIPEDIR/global/scripts/finish_hcpsetup.shlib"
 echo -e "\nMulti-Echo Preprocessing & Denoising Pipeline" 
 
 echo -e "\nProcessing the Field Maps"

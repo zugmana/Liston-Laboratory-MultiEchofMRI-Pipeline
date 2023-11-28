@@ -69,17 +69,23 @@ RUN echo "Downloading fix ..." \
     && mv HCPpipelines-4.7.0 /opt/HCPpipelines-4.7.0 \
     && rm v4.7.0.zip
 COPY install_packages.R /tmp/
-RUN Rscript /tmp/install_packages.R 
+RUN Rscript /tmp/install_packages.R
+RUN echo "Installing FSL ..." \
+    && curl -fsSLk https://fsl.fmrib.ox.ac.uk/fsldownloads/fslconda/releases/fslinstaller.py | python3 - -d /opt/fsl-6.0.6.4 -V 6.0.6.4 --skip_ssl_verify
 # Get the pipeline
 RUN git clone https://github.com/zugmana/Liston-Laboratory-MultiEchofMRI-Pipeline.git /opt/Liston-Laboratory-MultiEchofMRI-Pipeline \
     && cd /opt/Liston-Laboratory-MultiEchofMRI-Pipeline \
     && git checkout edb_template \
     && cd /opt/Liston-Laboratory-MultiEchofMRI-Pipeline/MultiEchofMRI-Pipeline \
     && chmod +x anat_highres_HCP_wrapper_par.sh func_denoise_ME_wrapper.sh func_denoise_manacc_meica.sh func_denoise_meica.sh func_denoise_mgtr.sh func_manacc_ME-fMRI_wrapper.sh func_preproc+denoise_ME-fMRI_wrapper.sh func_preproc_ME_wrapper.sh func_preproc_coreg.sh func_preproc_fm.sh func_preproc_headmotion.sh func_smooth.sh func_smooth_subcort_concat.sh func_vol2surf.sh \
-    && cd -
+    && cd - 
 RUN git clone https://github.com/fangq/jsonlab.git /opt/Liston-Laboratory-MultiEchofMRI-Pipeline/Res0urces/jsonlab
-RUN echo "Installing FSL ..." \
-    && curl -fsSLk https://fsl.fmrib.ox.ac.uk/fsldownloads/fslconda/releases/fslinstaller.py | python3 - -d /opt/fsl-6.0.6.4 -V 6.0.6.4 --skip_ssl_verify
+RUN wget -P /opt/MSM/ https://github.com/ecr05/MSM_HOCR/releases/download/v3.0FSL/msm_ubuntu_v3 \
+    && cd /opt/MSM/ \
+    && chmod +rwx msm_ubuntu_v3 \
+    wget -P /opt/MSM/ https://github.com/ecr05/MSM_HOCR/releases/download/v3.0FSL/MSM_HOCR_v3.zip \
+    unzip MSM_HOCR_v3.zip \
+    rm MSM_HOCR_v3.zip
 #FINAL
 FROM ubuntu:jammy-20230308
 ENV DEBIAN_FRONTEND="noninteractive" \
@@ -172,6 +178,14 @@ ENV FSLDIR="/opt/fsl-6.0.6.4" \
     FSLREMOTECALL="" \
     FSL_FIX_R_CMD="/usr/bin/R" \
     FSLGECUDAQ="cuda.q"
+#Set ENV for HCPpipelines
+ENV MSMBINDIR="/opt/MSM" \
+    HCPPIPEDIR="/opt/HCPpipelines-4.7.0/" \
+    MATLAB_COMPILER_RUNTIME="/opt/mcr/v93/" \
+    CARET7DIR="/opt/workbench/bin_linux64/wb_command" \
+    HCPCIFTIRWDIR="/opt/HCPpipelines-4.7.0/global/matlab/cifti-matlab"
+    
+
 
 COPY --from=download /opt/HCPpipelines-4.7.0 /opt/HCPpipelines-4.7.0
 COPY --from=download /opt/Liston-Laboratory-MultiEchofMRI-Pipeline /opt/Liston-Laboratory-MultiEchofMRI-Pipeline

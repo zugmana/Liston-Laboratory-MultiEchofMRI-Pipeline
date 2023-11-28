@@ -17,9 +17,9 @@ fi
 StudyFolder="/work/studyfolder"
 mkdir -p ${StudyFolder}/${Subject}/anat
 mkdir -p ${StudyFolder}/${Subject}/func
-ln -sfn ${OrigStudyFolder}/${Subject}/field_maps ${StudyFolder}/${Subject}/field_maps
-ln -sfn ${OrigStudyFolder}/${Subject}/anat/unprocessed ${StudyFolder}/${Subject}/anat/unprocessed
-ln -sfn ${OrigStudyFolder}/${Subject}/func/unprocessed ${StudyFolder}/${Subject}/func/unprocessed
+cp -sfn ${OrigStudyFolder}/${Subject}/field_maps ${StudyFolder}/${Subject}/field_maps
+cp -sfn ${OrigStudyFolder}/${Subject}/anat/unprocessed ${StudyFolder}/${Subject}/anat/unprocessed
+cp -sfn ${OrigStudyFolder}/${Subject}/func/unprocessed ${StudyFolder}/${Subject}/func/unprocessed
 
 # setup mcr
 ver=v93
@@ -27,8 +27,10 @@ mcr="/opt/mcr/v93"
 
 
 # Set variable value that sets up environment
-EnvironmentScript="/opt/HCPpipelines-4.7.0/Examples/Scripts/SetUpHCPPipeline.sh" # Pipeline environment script; users need to set this 
-source ${EnvironmentScript}	# Set up pipeline environment variables and software
+#SetUpHCPPipeline.sh does not work on the container. The variables are now set up in the build
+#EnvironmentScript="/opt/HCPpipelines-4.7.0/Examples/Scripts/SetUpHCPPipeline.sh" # Pipeline environment script; users need to set this 
+#source ${EnvironmentScript}	# Set up pipeline environment variables and software
+source "$HCPPIPEDIR/global/scripts/finish_hcpsetup.shlib"
 PRINTCOM="" # If PRINTCOM is not a null or empty string variable, then this script and other scripts that it calls will simply print out the primary commands it otherwise would run. This printing will be done using the command specified in the PRINTCOM variable
 
 AvgrdcSTRING="NONE" # Readout Distortion Correction;
@@ -203,4 +205,4 @@ mv ${StudyFolder}/${Subject}/qa/ ${StudyFolder}/${Subject}/anat/
 
 # rsync back to origstudyfolder
 rsync -ach --no-links ${StudyFolder}/${Subject}/anat/ ${OrigStudyFolder}/${Subject}/anat/
-chown -R :EDB ${OrigStudyFolder}/${Subject}/anat/
+#chown -R :EDB ${OrigStudyFolder}/${Subject}/anat/

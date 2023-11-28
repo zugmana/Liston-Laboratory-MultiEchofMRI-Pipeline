@@ -55,12 +55,12 @@ if [ -n "$processing_flag" ] && [ -n "$arg_p" ] && [ -n "$arg_d" ] && [ -n "$arg
     -anat)
       # Execute the corresponding script or command for anatomical processing
       echo "Executing anatomical script with arguments: $arg_p $arg_d $arg_c"
-      anat_highres_HCP_wrapper_par.sh $arg_p $arg_d $arg_c
+      anat_highres_HCP_wrapper_par.sh $arg_d $arg_p $arg_c
       ;;
     -func)
       # Execute the corresponding script or command for functional processing
       echo "Executing functional script with arguments: $arg_p $arg_d $arg_c"
-      func_preproc+denoise_ME-fMRI_wrapper.sh $arg_p $arg_d $arg_c
+      func_preproc+denoise_ME-fMRI_wrapper.sh $arg_d $arg_p $arg_c
       ;;
   esac
 else
