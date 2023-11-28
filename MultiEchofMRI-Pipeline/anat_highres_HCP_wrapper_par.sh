@@ -6,14 +6,15 @@ OrigStudyFolder=$1 # location of Subject folder
 Subject=$2 # space delimited list of subject IDs
 export NSLOTS=$3 # set number of cores for FreeSurfer
 
+echo "Starting anatomical pipeline for ${Subject}, in ${OrigStudyFolder}"
 # reformat subject folder path  
 if [ "${StudyFolder: -1}" = "/" ]; then
 	StudyFolder=${StudyFolder%?};
 fi
 
-# make study folder in lscratch with symlinks to unprocessed data
-[[ -d "/lscratch/${SLURM_JOB_ID}" ]] || exit 101
-StudyFolder=/lscratch/$SLURM_JOB_ID/studyfolder
+# make study folder in workdir with symlinks to unprocessed data
+[[ -d "/work/" ]] || exit 101
+StudyFolder="/work/studyfolder"
 mkdir -p ${StudyFolder}/${Subject}/anat
 mkdir -p ${StudyFolder}/${Subject}/func
 ln -sfn ${OrigStudyFolder}/${Subject}/field_maps ${StudyFolder}/${Subject}/field_maps
@@ -22,14 +23,11 @@ ln -sfn ${OrigStudyFolder}/${Subject}/func/unprocessed ${StudyFolder}/${Subject}
 
 # setup mcr
 ver=v93
-mcr=/usr/local/matlab-compiler/${ver}.tar.gz
-[[ -e "$mcr" ]] || exit 100
-[[ -d "/lscratch/$SLURM_JOB_ID" ]] || exit 101
+mcr="/opt/mcr/v93"
 
-tar -C /lscratch/$SLURM_JOB_ID -xzf "$mcr"
 
 # Set variable value that sets up environment
-EnvironmentScript="/data/MLDSST/nielsond/target_test/other_repos/HCPpipelines/Examples/Scripts/SetUpHCPPipeline.sh" # Pipeline environment script; users need to set this 
+EnvironmentScript="/opt/HCPpipelines-4.7.0/Examples/Scripts/SetUpHCPPipeline.sh" # Pipeline environment script; users need to set this 
 source ${EnvironmentScript}	# Set up pipeline environment variables and software
 PRINTCOM="" # If PRINTCOM is not a null or empty string variable, then this script and other scripts that it calls will simply print out the primary commands it otherwise would run. This printing will be done using the command specified in the PRINTCOM variable
 

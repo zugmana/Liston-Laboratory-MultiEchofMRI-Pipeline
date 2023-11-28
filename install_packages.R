@@ -10,6 +10,9 @@ packages <- list(
   "kernlab" = "0.9-24",
   "ROCR" = "1.0-7",
   "class" = "7.3-14",
+  "mvtnorm" = "1.0.8",
+  "multcomp" = "1.4-8",
+  "coin" = "1.2.2",
   "party" = "1.0-25",
   "e1071" = "1.6-7",
   "randomForest" = "4.6-12"

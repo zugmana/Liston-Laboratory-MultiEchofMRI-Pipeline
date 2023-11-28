@@ -4,7 +4,7 @@
 StudyFolder=$1 # location of Subject folder
 Subject=$2 # space delimited list of subject IDs
 NTHREADS=$3 # set number of threads; larger values will reduce runtime (but also increase RAM usage);
-
+echo "Starting anatomical pipeline for ${Subject}, in ${OrigStudyFolder}"
 # define the 
 # starting point 
 if [ -z "$4" ]
@@ -20,12 +20,9 @@ if [ "${StudyFolder: -1}" = "/" ]; then
 fi
 
 # setup mcr
+# setup mcr
 ver=v93
-mcr=/usr/local/matlab-compiler/${ver}.tar.gz
-[[ -e "$mcr" ]] || exit 100
-[[ -d "/lscratch/$SLURM_JOB_ID" ]] || exit 101
-
-tar -C /lscratch/$SLURM_JOB_ID -xzf "$mcr"
+mcr="/opt/mcr/v93"
 
 
 # define subject directory;
@@ -33,7 +30,7 @@ Subdir="$StudyFolder"/"$Subject"
 
 # define some directories containing 
 # custom matlab scripts and various atlas files;
-MEDIR="/data/MLDSST/nielsond/target_test/other_repos/Liston-Laboratory-MultiEchofMRI-Pipeline/MultiEchofMRI-Pipeline"
+MEDIR="/opt/Liston-Laboratory-MultiEchofMRI-Pipeline/MultiEchofMRI-Pipeline"
 
 # check to see if there's a symlink to res0urces here
 if ! [[ -e ${MEDIR}/res0urces ]]; then
@@ -50,7 +47,7 @@ MaxIterations=500
 MaxRestarts=5
 
 # set variable value that sets up environment
-EnvironmentScript="/data/MLDSST/nielsond/target_test/other_repos/HCPpipelines/Examples/Scripts/SetUpHCPPipeline.sh" # Pipeline environment script; users need to set this 
+EnvironmentScript="/opt/HCPpipelines-4.7.0/Examples/Scripts/SetUpHCPPipeline.sh" # Pipeline environment script; users need to set this 
 source ${EnvironmentScript}	# Set up pipeline environment variables and software
 
 echo -e "\nMulti-Echo Preprocessing & Denoising Pipeline" 
