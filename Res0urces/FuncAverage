@@ -46,8 +46,8 @@ crop=yes
 verbose=no
 wdir=
 cleanup=yes
-StandardImage=/data/MLDSST/nielsond/target_test/other_repos/HCPpipelines/global/templates/MNI152_T2_2mm
-StandardMask=/data/MLDSST/nielsond/target_test/other_repos/HCPpipelines/global/templates/MNI152_T1_2mm_brain_mask_dil
+StandardImage=/opt/HCPpipelines-4.7.0/global/templates/MNI152_T2_2mm
+StandardMask=/opt/HCPpipelines-4.7.0/global/templates/MNI152_T1_2mm_brain_mask_dil
 
 if [ $# -eq 0 ] ; then Usage; exit 0; fi
 while [ $# -ge 1 ] ; do

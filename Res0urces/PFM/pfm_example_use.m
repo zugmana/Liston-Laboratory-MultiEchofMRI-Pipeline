@@ -1,11 +1,11 @@
 %% An example precision functional mapping routine
 
 % define some paths 
-addpath(genpath('/data/MLDSST/nielsond/target_test/other_repos/Liston-Laboratory-MultiEchofMRI-Pipeline/Res0urces/')); % this folder contains ft_read / gifti functions for reading and writing cifti files (e.g., https://github.com/MidnightScanClub/MSCcodebase).
+addpath(genpath('/opt/Liston-Laboratory-MultiEchofMRI-Pipeline/Liston-Laboratory-MultiEchofMRI-Pipeline/Res0urces/')); % this folder contains ft_read / gifti functions for reading and writing cifti files (e.g., https://github.com/MidnightScanClub/MSCcodebase).
 
 % define subject 
 % directory and surface files;
-Subdir = '/data/EDB/TMSpilot/liston/sub-24704';
+Subdir = '/data/sub-24704';
 str = strsplit(Subdir,'/'); Subject = str{end};
 MidthickSurfs{1} = [Subdir '/anat/T1w/fsaverage_LR32k/' Subject '.L.midthickness.32k_fs_LR.surf.gii'];
 MidthickSurfs{2} = [Subdir '/anat/T1w/fsaverage_LR32k/' Subject '.R.midthickness.32k_fs_LR.surf.gii'];

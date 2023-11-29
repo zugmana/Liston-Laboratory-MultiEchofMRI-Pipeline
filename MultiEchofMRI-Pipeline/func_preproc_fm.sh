@@ -18,7 +18,7 @@ cp -rf "$MEDIR"/res0urces/find_fm_params.m \
 "$Subdir"/workspace/temp.m
 
 # define some Matlab variables
-echo "addpath(genpath('/data/MLDSST/nielsond/target_test/other_repos/jsonlab')); addpath(genpath('${MEDIR}'));" | cat - "$Subdir"/workspace/temp.m > temp && mv temp "$Subdir"/workspace/temp.m # > /dev/null 2>&1
+echo "addpath(genpath('/opt/Liston-Laboratory-MultiEchofMRI-Pipeline/Res0urces/jsonlab')); addpath(genpath('${MEDIR}'));" | cat - "$Subdir"/workspace/temp.m > temp && mv temp "$Subdir"/workspace/temp.m # > /dev/null 2>&1
 
 echo Subdir=["'$Subdir'"] | cat - "$Subdir"/workspace/temp.m >> temp && mv temp "$Subdir"/workspace/temp.m # > /dev/null 2>&1  		
 echo StartSession="$StartSession" | cat - "$Subdir"/workspace/temp.m >> temp && mv temp "$Subdir"/workspace/temp.m # > /dev/null 2>&1  		

@@ -15,7 +15,7 @@ cp -rf "$MEDIR"/res0urces/smooth_subcort_concat.m \
 "$Subdir"/workspace/temp.m
 
 # define some Matlab variables;
-echo "addpath(genpath('/data/MLDSST/nielsond/target_test/other_repos/jsonlab')); addpath(genpath('${MEDIR}'))" | cat - "$Subdir"/workspace/temp.m > temp && mv temp "$Subdir"/workspace/temp.m
+echo "addpath(genpath('/opt/Liston-Laboratory-MultiEchofMRI-Pipeline/Res0urces/jsonlab')); addpath(genpath('${MEDIR}'))" | cat - "$Subdir"/workspace/temp.m > temp && mv temp "$Subdir"/workspace/temp.m
 echo Subdir=["'$Subdir'"] | cat - "$Subdir"/workspace/temp.m >> temp && mv temp "$Subdir"/workspace/temp.m # > /dev/null 2>&1 		
 cd "$Subdir"/workspace/ # run script via Matlab 
 matlab -nodesktop -nosplash -r "temp; exit" # > /dev/null 2>&1

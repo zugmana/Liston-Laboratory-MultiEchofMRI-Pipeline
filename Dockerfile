@@ -64,8 +64,6 @@ RUN echo "Downloading fix ..." \
          --exclude='subjects/fsaverage6' \
          --exclude='subjects/fsaverage_sym' \
          --exclude='trctrain' \
-    && echo "Downloading MSM..." \
-    && wget -P /opt/MSM/ https://github.com/ecr05/MSM_HOCR/releases/download/v3.0FSL/msm_centos_v3 \
     && echo "Downloading HCPpipelines..." \
     && wget -q https://github.com/Washington-University/HCPpipelines/archive/refs/tags/v4.7.0.zip \
     && unzip v4.7.0.zip \
@@ -85,10 +83,8 @@ RUN git clone https://github.com/zugmana/Liston-Laboratory-MultiEchofMRI-Pipelin
 RUN git clone https://github.com/fangq/jsonlab.git /opt/Liston-Laboratory-MultiEchofMRI-Pipeline/Res0urces/jsonlab
 RUN wget -P /opt/MSM/ https://github.com/ecr05/MSM_HOCR/releases/download/v3.0FSL/msm_ubuntu_v3 \
     && cd /opt/MSM/ \
-    && chmod +rwx msm_ubuntu_v3 \
-    && wget -P /opt/MSM/ https://github.com/ecr05/MSM_HOCR/releases/download/v3.0FSL/MSM_HOCR_v3.zip \
-    && unzip MSM_HOCR_v3.zip \
-    && rm MSM_HOCR_v3.zip
+    && mv msm_ubuntu_v3 msm \
+    && chmod +rwx msm
 #FINAL
 FROM ubuntu:jammy-20230308
 ENV DEBIAN_FRONTEND="noninteractive" \
@@ -183,7 +179,7 @@ ENV FSLDIR="/opt/fsl-6.0.6.4" \
     FSL_FIX_R_CMD="/usr/bin/R" \
     FSLGECUDAQ="cuda.q"
 #Set ENV for HCPpipelines
-ENV MSMBINDIR="/opt/MSM" \
+ENV MSMBINDIR="/opt/MSM/" \
     HCPPIPEDIR="/opt/HCPpipelines-4.7.0/" \
     MATLAB_COMPILER_RUNTIME="/opt/mcr/v93/" \
     CARET7DIR="/opt/workbench/bin_linux64/" \
