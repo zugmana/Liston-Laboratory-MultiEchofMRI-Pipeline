@@ -83,9 +83,9 @@ RUN git clone https://github.com/fangq/jsonlab.git /opt/Liston-Laboratory-MultiE
 RUN wget -P /opt/MSM/ https://github.com/ecr05/MSM_HOCR/releases/download/v3.0FSL/msm_ubuntu_v3 \
     && cd /opt/MSM/ \
     && chmod +rwx msm_ubuntu_v3 \
-    wget -P /opt/MSM/ https://github.com/ecr05/MSM_HOCR/releases/download/v3.0FSL/MSM_HOCR_v3.zip \
-    unzip MSM_HOCR_v3.zip \
-    rm MSM_HOCR_v3.zip
+    && wget -P /opt/MSM/ https://github.com/ecr05/MSM_HOCR/releases/download/v3.0FSL/MSM_HOCR_v3.zip \
+    && unzip MSM_HOCR_v3.zip \
+    && rm MSM_HOCR_v3.zip
 #FINAL
 FROM ubuntu:jammy-20230308
 ENV DEBIAN_FRONTEND="noninteractive" \

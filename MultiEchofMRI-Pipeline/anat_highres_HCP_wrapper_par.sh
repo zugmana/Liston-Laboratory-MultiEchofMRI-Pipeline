@@ -17,9 +17,9 @@ fi
 StudyFolder="/work/studyfolder"
 mkdir -p ${StudyFolder}/${Subject}/anat
 mkdir -p ${StudyFolder}/${Subject}/func
-cp -sfn ${OrigStudyFolder}/${Subject}/field_maps ${StudyFolder}/${Subject}/field_maps
-cp -sfn ${OrigStudyFolder}/${Subject}/anat/unprocessed ${StudyFolder}/${Subject}/anat/unprocessed
-cp -sfn ${OrigStudyFolder}/${Subject}/func/unprocessed ${StudyFolder}/${Subject}/func/unprocessed
+cp -r ${OrigStudyFolder}/${Subject}/field_maps ${StudyFolder}/${Subject}/field_maps
+cp -r ${OrigStudyFolder}/${Subject}/anat/unprocessed ${StudyFolder}/${Subject}/anat/unprocessed
+cp -r ${OrigStudyFolder}/${Subject}/func/unprocessed ${StudyFolder}/${Subject}/func/unprocessed
 
 # setup mcr
 ver=v93
