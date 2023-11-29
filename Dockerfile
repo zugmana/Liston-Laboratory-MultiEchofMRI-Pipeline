@@ -27,8 +27,11 @@ RUN echo "Downloading Matlab..." \
     --release=r2023a \
     --destination=/opt/matlab/2023a \
     --products="Signal_Processing_Toolbox" \
+    && ./mpm install \
+    --release=r2023a \
+    --destination=/opt/matlab/2023a \
+    --products="Statistics_and_Machine_Learning_Toolbox" \
     && rm -f mpm /tmp/mathworks_root.log \
-    && ln -s /opt/matlab/2023a /usr/local/bin/matlab \
     && rm -f install_matlab.sh \
     && rm -fr /tmp/*
 RUN echo "install Matlab compiler" \
@@ -146,6 +149,7 @@ RUN apt-get update -qq \
         libglu1-mesa-dev \
         libgomp1 \
         nano \
+        rsync \
         python3 
 
 ENV OS="Linux" \
@@ -182,7 +186,7 @@ ENV FSLDIR="/opt/fsl-6.0.6.4" \
 ENV MSMBINDIR="/opt/MSM" \
     HCPPIPEDIR="/opt/HCPpipelines-4.7.0/" \
     MATLAB_COMPILER_RUNTIME="/opt/mcr/v93/" \
-    CARET7DIR="/opt/workbench/bin_linux64/wb_command" \
+    CARET7DIR="/opt/workbench/bin_linux64/" \
     HCPCIFTIRWDIR="/opt/HCPpipelines-4.7.0/global/matlab/cifti-matlab"
     
 
@@ -198,7 +202,7 @@ COPY --from=download /opt/workbench /opt/workbench
 COPY --from=download /usr/local/lib/R/site-library /usr/local/lib/R/site-library
 COPY --from=download /opt/mcr/v93 /opt/mcr/v93
 # Update the PATH for Bash
-ENV PATH=$PATH:/opt/workbench:/opt/workbench/bin_linux64:/opt/Liston-Laboratory-MultiEchofMRI-Pipeline/MultiEchofMRI-Pipeline/
+ENV PATH=$PATH:/opt/workbench:/opt/workbench/bin_linux64:/opt/Liston-Laboratory-MultiEchofMRI-Pipeline/MultiEchofMRI-Pipeline/:/opt/matlab/2023a/bin
 
 # Set the runscript
 CMD ["/opt/Liston-Laboratory-MultiEchofMRI-Pipeline/MultiEchofMRI-Pipeline/entrypoint.sh"]

@@ -4,7 +4,7 @@
 StudyFolder=$1 # location of Subject folder
 Subject=$2 # space delimited list of subject IDs
 NTHREADS=$3 # set number of threads; larger values will reduce runtime (but also increase RAM usage);
-echo "Starting anatomical pipeline for ${Subject}, in ${OrigStudyFolder}"
+echo "Starting functional pipeline for ${Subject}, in ${OrigStudyFolder}"
 # define the 
 # starting point 
 if [ -z "$4" ]
