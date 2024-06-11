@@ -83,9 +83,6 @@ ENV FSLDIR="/opt/fsl" \
     FSLGECUDAQ="cuda.q"
 RUN apt-get update -qq \
     && apt-get install -y -q --no-install-recommends \
-           bc \
-           ca-certificates \
-           curl \
            dc \
            file \
            libfontconfig1 \
@@ -115,13 +112,7 @@ RUN apt-get update -qq \
     && curl -fsSL https://fsl.fmrib.ox.ac.uk/fsldownloads/fslconda/releases/fslinstaller.py | python3 - -d /opt/fsl --skip_ssl_verify
 ENV ANTSPATH="/opt/ants-2.4.3/" \
     PATH="/opt/ants-2.4.3:$PATH"
-RUN apt-get update -qq \
-    && apt-get install -y -q --no-install-recommends \
-           ca-certificates \
-           curl \
-           unzip \
-    && rm -rf /var/lib/apt/lists/* \
-    && echo "Downloading ANTs ..." \
+RUN echo "Downloading ANTs ..." \
     && curl -fsSL -o ants.zip https://github.com/ANTsX/ANTs/releases/download/v2.4.3/ants-2.4.3-centos7-X64-gcc.zip \
     && unzip ants.zip -d /opt \
     && mv /opt/ants-2.4.3/bin/* /opt/ants-2.4.3 \
@@ -164,7 +155,8 @@ RUN echo "Downloading fix ..." \
 COPY install_packages.R /tmp/
 RUN Rscript /tmp/install_packages.R
 # Get the pipeline
-RUN git clone https://github.com/zugmana/Liston-Laboratory-MultiEchofMRI-Pipeline.git /opt/Liston-Laboratory-MultiEchofMRI-Pipeline \
+RUN echo "Downloading pipeline ..." \
+    &&  git clone https://github.com/zugmana/Liston-Laboratory-MultiEchofMRI-Pipeline.git /opt/Liston-Laboratory-MultiEchofMRI-Pipeline \
     && cd /opt/Liston-Laboratory-MultiEchofMRI-Pipeline \
     && git checkout edb_template \
     && cd /opt/Liston-Laboratory-MultiEchofMRI-Pipeline/MultiEchofMRI-Pipeline \
@@ -175,6 +167,48 @@ RUN wget -P /opt/MSM/ https://github.com/ecr05/MSM_HOCR/releases/download/v3.0FS
     && cd /opt/MSM/ \
     && mv msm_ubuntu_v3 msm \
     && chmod +rwx msm
+#Forgot Tedana
+ENV CONDA_DIR="/opt/miniconda-latest" \
+    PATH="/opt/miniconda-latest/bin:$PATH"
+RUN apt-get update -qq \
+    && apt-get install -y -q --no-install-recommends \
+           bzip2 \
+           parallel \
+    && rm -rf /var/lib/apt/lists/* \
+    # Install dependencies.
+    && export PATH="/opt/miniconda-latest/bin:$PATH" \
+    && echo "Downloading Miniconda installer ..." \
+    && conda_installer="/tmp/miniconda.sh" \
+    && curl -fsSL -o "$conda_installer" https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    && bash "$conda_installer" -b -p /opt/miniconda-latest \
+    && rm -f "$conda_installer" \
+    && conda update -yq -nbase conda \
+    # Prefer packages in conda-forge
+    && conda config --system --prepend channels conda-forge \
+    # Packages in lower-priority channels not considered if a package with the same
+    # name exists in a higher priority channel. Can dramatically speed up installations.
+    # Conda recommends this as a default
+    # https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-channels.html
+    && conda config --set channel_priority strict \
+    && conda config --system --set auto_update_conda false \
+    && conda config --system --set show_channel_urls true \
+    # Enable `conda activate`
+    && conda init bash \
+    && conda create -y  --name me_v10 \
+    && conda install -y  --name me_v10 \
+           "nilearn" \
+           "nibabel" \
+           "numpy" \
+           "scikit-learn" \
+           "scipy" \
+    && bash -c "source activate me_v10 \
+    &&   python -m pip install --no-cache-dir  \
+            "mapca" \
+            "tedana"" \            
+    # Clean up
+    && sync && conda clean --all --yes && sync \
+    && rm -rf ~/.cache/pip/*
+
 # Update the PATH for Bash
 ENV PATH=$PATH:/opt/workbench:/opt/workbench/bin_linux64:/opt/Liston-Laboratory-MultiEchofMRI-Pipeline/MultiEchofMRI-Pipeline/:/opt/matlab/2023a/bin:/opt/ants-2.4.3
 #Set ENV for HCPpipelines
