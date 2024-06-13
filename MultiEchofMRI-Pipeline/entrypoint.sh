@@ -12,7 +12,7 @@ last_option=""
 # Iterate through the arguments
 for arg in "$@"; do
   case "$arg" in
-    -anat|-func|-smooth|-both)
+    -anat|-func|-smooth|-all)
       # Ensure that processing_flag is not already set
       if [ -z "$processing_flag" ]; then
         processing_flag="$arg"
@@ -69,9 +69,10 @@ if [ -n "$processing_flag" ] && [ -n "$arg_p" ] && [ -n "$arg_d" ] && [ -n "$arg
       ;;
     -all)
       # Execute the corresponding script or command for functional processing
-      echo "Executing functional script with arguments: $arg_p $arg_d $arg_c"
+      echo "Executing all script with arguments: $arg_p $arg_d $arg_c"
       anat_highres_HCP_wrapper_par.sh $arg_d $arg_p $arg_c
       func_preproc+denoise_ME-fMRI_wrapper.sh $arg_d $arg_p $arg_c
+      func_smooth_subcort_concat.sh /opt/Liston-Laboratory-MultiEchofMRI-Pipeline $arg_p $arg_d
       ;;
   esac
 else
