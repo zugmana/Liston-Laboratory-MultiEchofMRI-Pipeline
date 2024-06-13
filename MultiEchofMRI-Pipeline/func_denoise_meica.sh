@@ -44,7 +44,7 @@ source activate me_v10
 # masksum = (np.abs(echo_means) > lthrs).sum(axis=-1) <-- this is the original code in Tedana; uses an arbitrary 33rd percentile cutoff. 
 # masksum = (np.abs(echo_means) > 0).sum(axis=-1) <--- this is effectively forces tedana to consider all in-brain voxels (with a R2 >= 0.8; see func_denoise_t2star.sh and fit_t2s.m) as "good".
 
-func () {
+func () {func () {
 
 	# remove any existing Tedana dirs.;
 	rm -rf "$1"/func/rest/"$6"/Tedana* > /dev/null 2>&1 
@@ -55,8 +55,7 @@ func () {
 
 	# run the "tedana" workflow; 
 	tedana -d "$1"/func/rest/"$6"/Rest_E*_acpc.nii.gz -e $(cat "$1"/func/rest/"$6"/TE.txt) --out-dir "$1"/func/rest/"$6"/Tedana/ \
-	--tedpca "$3" --fittype curvefit --mask "$1"/func/rest/"$6"/brain_mask.nii.gz --maxit "$4" --maxrestart "$5" --seed 42 \
-    --convention orig --verbose --lowmem # specify more iterations / restarts to increase likelihood of ICA convergence (also increases possible runtime).
+	--tedpca "$3" --fittype curvefit --mask "$1"/func/rest/"$6"/brain_mask.nii.gz --maxit "$4" --maxrestart "$5" --seed 42 --lowmem# specify more iterations / restarts to increase likelihood of ICA convergence (also increases possible runtime).
 
 	# # remove temporary files;
 	rm "$1"/func/rest/"$6"/brain_mask.nii.gz
@@ -129,5 +128,4 @@ func () {
 }
 
 export -f func # run tedana;
-parallel --jobs $NTHREADS func ::: $Subdir ::: $Subject ::: $MEPCA ::: $MaxIterations ::: $MaxRestarts ::: $DataDirs # > /dev/null 2>&1
-
+parallel --jobs $NTHREADS func ::: $Subdir ::: $Subject ::: $MEPCA ::: $MaxIterations ::: $MaxRestarts ::: $DataDirs > /dev/null 2>&1
