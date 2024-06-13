@@ -11,7 +11,7 @@ rm -rf "$Subdir"/workspace/ > /dev/null 2>&1
 mkdir "$Subdir"/workspace/ > /dev/null 2>&1
 
 # create temp. find_epi_params.m 
-cp -rf "$MEDIR"/res0urces/smooth_subcort_concat.m \
+cp -rf "$MEDIR"/Res0urces/smooth_subcort_concat.m \
 "$Subdir"/workspace/temp.m
 
 # define some Matlab variables;
