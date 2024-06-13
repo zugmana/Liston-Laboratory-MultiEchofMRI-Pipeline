@@ -12,7 +12,7 @@ last_option=""
 # Iterate through the arguments
 for arg in "$@"; do
   case "$arg" in
-    -anat|-func|-both)
+    -anat|-func|-smooth|-both)
       # Ensure that processing_flag is not already set
       if [ -z "$processing_flag" ]; then
         processing_flag="$arg"
@@ -62,7 +62,12 @@ if [ -n "$processing_flag" ] && [ -n "$arg_p" ] && [ -n "$arg_d" ] && [ -n "$arg
       echo "Executing functional script with arguments: $arg_p $arg_d $arg_c"
       func_preproc+denoise_ME-fMRI_wrapper.sh $arg_d $arg_p $arg_c
       ;;
-    -both)
+    -smooth)
+      # Execute the corresponding script or command for functional processing
+      echo "Executing functional script with arguments: $arg_p $arg_d $arg_c"
+      func_smooth_subcort_concat.sh /opt/Liston-Laboratory-MultiEchofMRI-Pipeline $arg_p $arg_d
+      ;;
+    -all)
       # Execute the corresponding script or command for functional processing
       echo "Executing functional script with arguments: $arg_p $arg_d $arg_c"
       anat_highres_HCP_wrapper_par.sh $arg_d $arg_p $arg_c
@@ -71,6 +76,6 @@ if [ -n "$processing_flag" ] && [ -n "$arg_p" ] && [ -n "$arg_d" ] && [ -n "$arg
   esac
 else
   # Display usage instructions when the input is not as expected
-  echo "Usage: entrypoint.sh {-anat|-func|both} -p participant -d directory for data -c num_proc"
+  echo "Usage: entrypoint.sh {-anat|-func|-smooth|-all} -p participant -d directory for data -c num_proc"
   exit 1
 fi
