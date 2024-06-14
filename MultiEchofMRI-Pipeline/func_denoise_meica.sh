@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 # CJL; (cjl2007@med.cornell.edu)
 
 Subject=$1
@@ -33,12 +33,14 @@ for s in $sessions ; do
 
 done
 
+# hardcode tedana path 
+# TODO: fix this
+export PATH=/data/MLDSST/nielsond/target_test/other_repos/for_tedana/bin:$PATH
+
+
 # define a list of directories;
 DataDirs=$(cat "$Subdir"/DataDirs.txt) # note: this is used for parallel processing purposes.
 rm "$Subdir"/DataDirs.txt # remove intermediate file;
-
-# activate tedana v10;
-source activate me_v10
 
 # Note: that in the make_adaptive_mask function in utils.py, following change is made... 
 # masksum = (np.abs(echo_means) > lthrs).sum(axis=-1) <-- this is the original code in Tedana; uses an arbitrary 33rd percentile cutoff. 
@@ -55,7 +57,8 @@ func () {
 
 	# run the "tedana" workflow; 
 	tedana -d "$1"/func/rest/"$6"/Rest_E*_acpc.nii.gz -e $(cat "$1"/func/rest/"$6"/TE.txt) --out-dir "$1"/func/rest/"$6"/Tedana/ \
-	--tedpca "$3" --fittype curvefit --mask "$1"/func/rest/"$6"/brain_mask.nii.gz --maxit "$4" --maxrestart "$5" --seed 42 --lowmem# specify more iterations / restarts to increase likelihood of ICA convergence (also increases possible runtime).
+	--tedpca "$3" --fittype curvefit --mask "$1"/func/rest/"$6"/brain_mask.nii.gz --maxit "$4" --maxrestart "$5" --seed 42 \
+    --convention orig --verbose --lowmem # specify more iterations / restarts to increase likelihood of ICA convergence (also increases possible runtime).
 
 	# # remove temporary files;
 	rm "$1"/func/rest/"$6"/brain_mask.nii.gz
@@ -128,4 +131,4 @@ func () {
 }
 
 export -f func # run tedana;
-parallel --jobs $NTHREADS func ::: $Subdir ::: $Subject ::: $MEPCA ::: $MaxIterations ::: $MaxRestarts ::: $DataDirs > /dev/null 2>&1
+parallel --jobs $NTHREADS func ::: $Subdir ::: $Subject ::: $MEPCA ::: $MaxIterations ::: $MaxRestarts ::: $DataDirs # > /dev/null 2>&1
