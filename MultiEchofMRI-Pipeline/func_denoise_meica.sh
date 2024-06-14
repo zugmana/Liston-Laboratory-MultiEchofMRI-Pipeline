@@ -41,7 +41,7 @@ export PATH=/data/MLDSST/nielsond/target_test/other_repos/for_tedana/bin:$PATH
 # define a list of directories;
 DataDirs=$(cat "$Subdir"/DataDirs.txt) # note: this is used for parallel processing purposes.
 rm "$Subdir"/DataDirs.txt # remove intermediate file;
-
+source activate me_v10
 # Note: that in the make_adaptive_mask function in utils.py, following change is made... 
 # masksum = (np.abs(echo_means) > lthrs).sum(axis=-1) <-- this is the original code in Tedana; uses an arbitrary 33rd percentile cutoff. 
 # masksum = (np.abs(echo_means) > 0).sum(axis=-1) <--- this is effectively forces tedana to consider all in-brain voxels (with a R2 >= 0.8; see func_denoise_t2star.sh and fit_t2s.m) as "good".
