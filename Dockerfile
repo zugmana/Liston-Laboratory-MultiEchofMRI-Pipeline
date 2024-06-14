@@ -137,6 +137,10 @@ RUN echo "Downloading Matlab..." \
     --release=r2023a \
     --destination=/opt/matlab/2023a \
     --products="Image_Processing_Toolbox" \
+    && ./mpm install \
+    --release=r2023a \
+    --destination=/opt/matlab/2023a \
+    --products="Parallel_Computing_Toolbox" \
     && rm -f mpm /tmp/mathworks_root.log \
     && rm -f install_matlab.sh \
     && rm -fr /tmp/*
@@ -155,7 +159,8 @@ RUN echo "Downloading fix ..." \
 COPY install_packages.R /tmp/
 RUN Rscript /tmp/install_packages.R
 # Get the pipeline
-RUN echo "Downloading pipeline ..." \
+RUN echo "Downloading pipeline" \
+    && echo "" \
     &&  git clone https://github.com/zugmana/Liston-Laboratory-MultiEchofMRI-Pipeline.git /opt/Liston-Laboratory-MultiEchofMRI-Pipeline \
     && cd /opt/Liston-Laboratory-MultiEchofMRI-Pipeline \
     && git checkout edb_template \
@@ -163,6 +168,7 @@ RUN echo "Downloading pipeline ..." \
     && chmod +x anat_highres_HCP_wrapper_par.sh func_denoise_ME_wrapper.sh func_denoise_manacc_meica.sh func_denoise_meica.sh func_denoise_mgtr.sh func_manacc_ME-fMRI_wrapper.sh func_preproc+denoise_ME-fMRI_wrapper.sh func_preproc_ME_wrapper.sh func_preproc_coreg.sh func_preproc_fm.sh func_preproc_headmotion.sh func_smooth.sh func_smooth_subcort_concat.sh func_vol2surf.sh \
     && cd - 
 RUN git clone https://github.com/fangq/jsonlab.git /opt/Liston-Laboratory-MultiEchofMRI-Pipeline/Res0urces/jsonlab
+RUN git clone https://github.com/MidnightScanClub/MSCcodebase.git /opt/Liston-Laboratory-MultiEchofMRI-Pipeline/Res0urces/PFM/MSCcodebase
 RUN wget -P /opt/MSM/ https://github.com/ecr05/MSM_HOCR/releases/download/v3.0FSL/msm_ubuntu_v3 \
     && cd /opt/MSM/ \
     && mv msm_ubuntu_v3 msm \
