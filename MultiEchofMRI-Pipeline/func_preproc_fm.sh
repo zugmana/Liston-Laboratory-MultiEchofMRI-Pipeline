@@ -59,6 +59,7 @@ done
 
 # define a list of directories;
 AllFMs=$(cat "$Subdir"/AllFMs.txt) # note: this is used for parallel processing purposes.
+echo ${ALLFMs}
 rm "$Subdir"/AllFMs.txt # remove intermediate file;
 
 # # create a white matter segmentation (.mgz --> .nii.gz);
@@ -123,7 +124,7 @@ func () {
 }
 
 export -f func # create a field map for all sessions (if possible)
-parallel --jobs $NTHREADS --shellquote bash -c 'func "$@"' _  ::: $MEDIR ::: $Subdir ::: $Subject ::: $WDIR ::: $AllFMs # > /dev/null 2>&1  
+parallel --jobs $NTHREADS --shellquote bash func ::: $MEDIR ::: $Subdir ::: $Subject ::: $WDIR ::: $AllFMs # > /dev/null 2>&1  
 
 # merge & average the co-registered field map images accross sessions;  
 fslmerge -t "$Subdir"/func/field_maps/Avg_FM_rads_acpc.nii.gz "$WDIR"/FM_rads_acpc_S*.nii.gz 
