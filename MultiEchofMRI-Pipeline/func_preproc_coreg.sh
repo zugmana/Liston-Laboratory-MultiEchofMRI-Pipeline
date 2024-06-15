@@ -11,6 +11,9 @@ DOF=$5
 NTHREADS=$6
 StartSession=$7
 
+#testing to see if this will make parallel work consistentl
+export SHELL=$(type -p bash)
+
 # first, lets read in all the .json files associated with each scan 
 # & write out some .txt files that will be used during preprocessing
 
@@ -28,7 +31,7 @@ echo Subdir=["'$Subdir'"] | cat - "$Subdir"/workspace/temp.m >> temp && mv temp 
 echo FuncName=["'rest'"] | cat - "$Subdir"/workspace/temp.m >> temp && mv temp "$Subdir"/workspace/temp.m # > /dev/null 2>&1 		
 echo StartSession="$StartSession" | cat - "$Subdir"/workspace/temp.m >> temp && mv temp "$Subdir"/workspace/temp.m # > /dev/null 2>&1  		
 cd "$Subdir"/workspace/ # run script via Matlab 
-matlab -nodesktop -nosplash -r "temp; exit" # > /dev/null 2>&1 
+matlab -nodesktop -nosplash -nojvm -r "temp; exit" # > /dev/null 2>&1 
 
 # delete some files;
 rm -rf "$Subdir"/workspace/
