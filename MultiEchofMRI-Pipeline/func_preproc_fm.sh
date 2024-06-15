@@ -9,16 +9,17 @@ SUBJECTS_DIR="$Subdir"/anat/T1w/ # note: this is used for "bbregister" calls;
 NTHREADS=$4
 StartSession=$5
 export SUBJECTS_DIR="$Subdir"/anat/T1w
+export RESOURCESDIR="/opt/Liston-Laboratory-MultiEchofMRI-Pipeline/Res0urces/"
 # fresh workspace dir.
 rm -rf "$Subdir"/workspace/ # > /dev/null 2>&1 
 mkdir "$Subdir"/workspace/ # > /dev/null 2>&1 
 
 # create a temp. "find_fm_params.m"
-cp -rf "$MEDIR"/Res0urces/find_fm_params.m \
+cp -rf "$RESOURCESDIR"/find_fm_params.m \
 "$Subdir"/workspace/temp.m
 
 # define some Matlab variables
-echo "addpath(genpath('/opt/Liston-Laboratory-MultiEchofMRI-Pipeline/Res0urces/jsonlab')); addpath(genpath('${MEDIR}'));" | cat - "$Subdir"/workspace/temp.m > temp && mv temp "$Subdir"/workspace/temp.m # > /dev/null 2>&1
+echo "addpath(genpath('/opt/Liston-Laboratory-MultiEchofMRI-Pipeline/Res0urces/jsonlab')); addpath(genpath('${MEDIR}')); addpath(genpath('${RESOURCESDIR}'));" | cat - "$Subdir"/workspace/temp.m > temp && mv temp "$Subdir"/workspace/temp.m # > /dev/null 2>&1
 
 echo Subdir=["'$Subdir'"] | cat - "$Subdir"/workspace/temp.m >> temp && mv temp "$Subdir"/workspace/temp.m # > /dev/null 2>&1  		
 echo StartSession="$StartSession" | cat - "$Subdir"/workspace/temp.m >> temp && mv temp "$Subdir"/workspace/temp.m # > /dev/null 2>&1  		
@@ -107,11 +108,11 @@ func () {
 	bet "$4"/FM_mag_"$5".nii.gz "$4"/FM_mag_brain_"$5".nii.gz -f 0.35 -R # > /dev/null 2>&1 # temporary bet image 
 
 	# register reference volume to the T1-weighted anatomical image; use bbr cost function 
-	"$1"/Res0urces/epi_reg_dof --epi="$4"/FM_mag_"$5".nii.gz --t1="$2"/anat/T1w/T1w_acpc_dc_restore.nii.gz \
+	"$RESOURCESDIR"/epi_reg_dof --epi="$4"/FM_mag_"$5".nii.gz --t1="$2"/anat/T1w/T1w_acpc_dc_restore.nii.gz \
 	--t1brain="$2"/anat/T1w/T1w_acpc_dc_restore_brain.nii.gz --out="$4"/fm2acpc_"$5" --wmseg="$2"/anat/T1w/"$3"/mri/white.nii.gz --dof=6 # > /dev/null 2>&1 
 
 	# use BBRegister to fine-tune the existing co-registration; output FSL style transformation matrix; (not sure why --s isnt working, renaming dir. to "freesurfer" as an ugly workaround). This does not make a lot of sense. Will change in the future.
-	bbregister --s freesurfer --mov "$4"/fm2acpc_"$5".nii.gz --init-reg "$1"/Res0urces/FSL/eye.dat --surf white.deformed --bold --reg "$4"/fm2acpc_bbr_"$5".dat --6 --o "$4"/fm2acpc_bbr_"$5".nii.gz # > /dev/null 2>&1  
+	bbregister --s freesurfer --mov "$4"/fm2acpc_"$5".nii.gz --init-reg ""$RESOURCESDIR"/FSL/eye.dat --surf white.deformed --bold --reg "$4"/fm2acpc_bbr_"$5".dat --6 --o "$4"/fm2acpc_bbr_"$5".nii.gz # > /dev/null 2>&1  
 	tkregister2 --s freesurfer --noedit --reg "$4"/fm2acpc_bbr_"$5".dat --mov "$4"/fm2acpc_"$5".nii.gz --targ "$2"/anat/T1w/T1w_acpc_dc_restore.nii.gz --fslregout "$4"/fm2acpc_bbr_"$5".mat # > /dev/null 2>&1  
 
 	# combine the original and 
