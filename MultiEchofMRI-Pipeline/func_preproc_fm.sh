@@ -112,7 +112,7 @@ func () {
 	--t1brain="$2"/anat/T1w/T1w_acpc_dc_restore_brain.nii.gz --out="$4"/fm2acpc_"$5" --wmseg="$2"/anat/T1w/"$3"/mri/white.nii.gz --dof=6 # > /dev/null 2>&1 
 
 	# use BBRegister to fine-tune the existing co-registration; output FSL style transformation matrix; (not sure why --s isnt working, renaming dir. to "freesurfer" as an ugly workaround). This does not make a lot of sense. Will change in the future.
-	bbregister --s freesurfer --mov "$4"/fm2acpc_"$5".nii.gz --init-reg ""$RESOURCESDIR"/FSL/eye.dat --surf white.deformed --bold --reg "$4"/fm2acpc_bbr_"$5".dat --6 --o "$4"/fm2acpc_bbr_"$5".nii.gz # > /dev/null 2>&1  
+	bbregister --s freesurfer --mov "$4"/fm2acpc_"$5".nii.gz --init-reg "$RESOURCESDIR"/FSL/eye.dat --surf white.deformed --bold --reg "$4"/fm2acpc_bbr_"$5".dat --6 --o "$4"/fm2acpc_bbr_"$5".nii.gz # > /dev/null 2>&1  
 	tkregister2 --s freesurfer --noedit --reg "$4"/fm2acpc_bbr_"$5".dat --mov "$4"/fm2acpc_"$5".nii.gz --targ "$2"/anat/T1w/T1w_acpc_dc_restore.nii.gz --fslregout "$4"/fm2acpc_bbr_"$5".mat # > /dev/null 2>&1  
 
 	# combine the original and 
