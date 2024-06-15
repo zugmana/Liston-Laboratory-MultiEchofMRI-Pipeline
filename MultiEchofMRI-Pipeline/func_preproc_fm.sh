@@ -23,7 +23,7 @@ echo "addpath(genpath('/opt/Liston-Laboratory-MultiEchofMRI-Pipeline/Res0urces/j
 echo Subdir=["'$Subdir'"] | cat - "$Subdir"/workspace/temp.m >> temp && mv temp "$Subdir"/workspace/temp.m # > /dev/null 2>&1  		
 echo StartSession="$StartSession" | cat - "$Subdir"/workspace/temp.m >> temp && mv temp "$Subdir"/workspace/temp.m # > /dev/null 2>&1  		
 cd "$Subdir"/workspace/ # run script via Matlab 
-matlab -nodesktop -nosplash -r "temp; exit"
+matlab -nodesktop -nosplash -nojvm -r "temp; exit"
 
 # delete some files;
 rm "$Subdir"/workspace/temp.m
@@ -123,7 +123,7 @@ func () {
 }
 
 export -f func # create a field map for all sessions (if possible)
-parallel --jobs $NTHREADS func ::: $MEDIR ::: $Subdir ::: $Subject ::: $WDIR ::: $AllFMs # > /dev/null 2>&1  
+parallel --jobs $NTHREADS --shellquote bash -c 'func "$@"' _  ::: $MEDIR ::: $Subdir ::: $Subject ::: $WDIR ::: $AllFMs # > /dev/null 2>&1  
 
 # merge & average the co-registered field map images accross sessions;  
 fslmerge -t "$Subdir"/func/field_maps/Avg_FM_rads_acpc.nii.gz "$WDIR"/FM_rads_acpc_S*.nii.gz 
