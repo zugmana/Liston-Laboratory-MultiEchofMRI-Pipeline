@@ -33,6 +33,7 @@ cd "$Subdir"
 sessions=("$Subdir"/func/unprocessed/rest/session_*)
 sessions=$(seq $StartSession 1 "${#sessions[@]}")
 echo $sessions
+AllFMslist=""
 # sweep the sessions;
 for s in $sessions ; do
     
@@ -50,7 +51,7 @@ for s in $sessions ; do
 			# the "AllFMs.txt" file contains 
 			# dir. paths to every pair of field maps; 
 			echo S"$s"_R"$r" >> "$Subdir"/AllFMs.txt  
-
+            AllFMslist+="${s}_${r} "
 		fi
 
 	done
@@ -59,7 +60,11 @@ done
 
 # define a list of directories;
 AllFMs=$(cat "$Subdir"/AllFMs.txt) # note: this is used for parallel processing purposes.
-echo ${ALLFMs}
+echo "#####"
+echo "this is ${ALLFMs}"
+echo ""
+echo "this is $ALLFMslist"
+echo ""
 rm "$Subdir"/AllFMs.txt # remove intermediate file;
 
 # # create a white matter segmentation (.mgz --> .nii.gz);
