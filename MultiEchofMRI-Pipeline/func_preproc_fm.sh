@@ -63,9 +63,9 @@ AllFMs=$(cat "$Subdir"/AllFMs.txt) # note: this is used for parallel processing 
 echo "#####"
 echo "this is ${ALLFMs}"
 echo ""
-echo "this is $ALLFMslist"
+echo "this is ${ALLFMslist}"
 echo ""
-rm "$Subdir"/AllFMs.txt # remove intermediate file;
+#rm "$Subdir"/AllFMs.txt # remove intermediate file;
 
 # # create a white matter segmentation (.mgz --> .nii.gz);
 mri_binarize --i "$Subdir"/anat/T1w/"$Subject"/mri/aparc+aseg.mgz --wm --o "$Subdir"/anat/T1w/"$Subject"/mri/white.mgz # > /dev/null 2>&1  
