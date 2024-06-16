@@ -10,6 +10,9 @@ MaxIterations=$5
 MaxRestarts=$6
 StartSession=$7
 
+#testing to see if this will make parallel work consistentl
+export SHELL=$(type -p bash)
+
 # count the number of sessions
 sessions=("$Subdir"/func/rest/session_*)
 sessions=$(seq $StartSession 1 "${#sessions[@]}")
