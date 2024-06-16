@@ -251,6 +251,7 @@ cd "$Subdir" # go back to subject dir.
 # finally, evaluate whether scan-specific or average field maps 
 # produce the best co-registeration / cross-scan allignment & 
 # then generate a movie summarizing the results 
+# Obs: This sometimes cause the container to hang forever or throw a java error. Will turn off the movie.
 
 # fresh workspace dir.
 rm -rf "$Subdir"/workspace/ > /dev/null 2>&1
