@@ -10,6 +10,9 @@ DOF=$5
 NTHREADS=$6
 StartSession=$7
 
+#testing to see if this will make parallel work consistentl
+export SHELL=$(type -p bash)
+
 # count the number of sessions
 sessions=("$Subdir"/func/rest/session_*)
 sessions=$(seq $StartSession 1 "${#sessions[@]}")
@@ -194,7 +197,7 @@ func () {
 }
 
 export -f func # correct for head motion and warp to atlas space in single spline warp
-parallel --jobs $NTHREADS func ::: $MEDIR ::: $AtlasTemplate ::: $Subdir ::: $DOF ::: $AllScans > /dev/null 2>&1  
+parallel --jobs $NTHREADS func ::: $MEDIR ::: $AtlasTemplate ::: $Subdir ::: $DOF ::: $AllScans  
 
 # finally, calculate frame-wise displacement and generate stop-motion movies 
 # summarizing motion and respiration parameters and show minimally preprocessed images;

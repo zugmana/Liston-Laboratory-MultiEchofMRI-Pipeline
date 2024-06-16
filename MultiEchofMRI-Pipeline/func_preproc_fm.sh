@@ -35,7 +35,8 @@ sessions=("$Subdir"/func/unprocessed/rest/session_*)
 sessions=$(seq $StartSession 1 "${#sessions[@]}")
 echo $sessions
 AllFMslist=""
-echo "" > "$Subdir"/AllFMs.txt
+#echo "" > "$Subdir"/AllFMs.txt
+
 # sweep the sessions;
 for s in $sessions ; do
     
@@ -62,6 +63,7 @@ done
 
 # define a list of directories;
 AllFMs=$(cat "$Subdir"/AllFMs.txt) # note: this is used for parallel processing purposes.
+
 echo "#####"
 #echo "this is ${AllFMs}"
 #echo ""
@@ -145,3 +147,4 @@ fslmaths "$Subdir"/func/field_maps/Avg_FM_mag_acpc.nii.gz -Tmean "$Subdir"/func/
 fslmaths "$Subdir"/func/field_maps/Avg_FM_mag_acpc.nii.gz -mas "$Subdir"/anat/T1w/T1w_acpc_dc_restore_brain.nii.gz \
 "$Subdir"/func/field_maps/Avg_FM_mag_acpc_brain.nii.gz # > /dev/null 2>&1  
 rm -rf "$Subdir"/anat/T1w/freesurfer/ # remove softlink;
+rm "$Subdir"/AllFMs.txt
