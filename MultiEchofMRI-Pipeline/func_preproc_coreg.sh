@@ -252,7 +252,7 @@ cd "$Subdir" # go back to subject dir.
 # produce the best co-registeration / cross-scan allignment & 
 # then generate a movie summarizing the results 
 # Obs: This sometimes cause the container to hang forever or throw a java error. Will turn off the movie.
-
+# Probably this is a problem with running the container in a Mac
 # fresh workspace dir.
 rm -rf "$Subdir"/workspace/ > /dev/null 2>&1
 mkdir "$Subdir"/workspace/ > /dev/null 2>&1

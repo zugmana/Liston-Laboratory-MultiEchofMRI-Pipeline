@@ -16,22 +16,22 @@ count = 0; % tick
 
 % sweep the scans;
 for s = 1:length(sessions)
-    
+    disp(s)
     % this is the number of runs for this session;
     runs = dir([Subdir '/func/rest/session_' num2str(s) '/run_*']);
     
     % sweep the runs;
     for r = 1:length(runs)
-        
+        disp(r)   
         % tick
         count = count+1;
 
         % extract the SBref coregistered to target volume using average field map information;
         Volume = niftiread([Subdir '/func/qa/CoregQA/SBref2acpc_EpiReg+BBR_AvgFM_S' num2str(s) '_R' num2str(r) '.nii.gz']);
-        
+        disp(Volume)
         % log spatial correlation;
         Rho(count,1) = corr(Volume(BrainMask==1),TargetImage(BrainMask==1),'type','Spearman');
-        
+        disp(Rho)
         % if scan-specific field map exists; otherwise use NaN place-holder;
         if exist([Subdir '/func/qa/CoregQA/SBref2acpc_EpiReg+BBR_ScanSpecificFM_S' num2str(s) '_R' num2str(r) '.nii.gz'])
             Volume = niftiread([Subdir '/func/qa/CoregQA/SBref2acpc_EpiReg+BBR_ScanSpecificFM_S' num2str(s) '_R' num2str(r) '.nii.gz']);

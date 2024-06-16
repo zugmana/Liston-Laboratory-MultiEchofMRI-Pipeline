@@ -35,6 +35,7 @@ sessions=("$Subdir"/func/unprocessed/rest/session_*)
 sessions=$(seq $StartSession 1 "${#sessions[@]}")
 echo $sessions
 AllFMslist=""
+echo "" > "$Subdir"/AllFMs.txt
 # sweep the sessions;
 for s in $sessions ; do
     
@@ -62,10 +63,10 @@ done
 # define a list of directories;
 AllFMs=$(cat "$Subdir"/AllFMs.txt) # note: this is used for parallel processing purposes.
 echo "#####"
-echo "this is ${AllFMs}"
-echo ""
-echo "this is ${AllFMslist}"
-echo ""
+#echo "this is ${AllFMs}"
+#echo ""
+#echo "this is ${AllFMslist}"
+#echo ""
 #rm "$Subdir"/AllFMs.txt # remove intermediate file;
 
 # # create a white matter segmentation (.mgz --> .nii.gz);
