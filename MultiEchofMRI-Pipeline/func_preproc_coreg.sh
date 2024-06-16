@@ -242,7 +242,7 @@ echo Subdir=["'$Subdir'"] | cat - "$Subdir"/workspace/temp.m >> temp && mv temp 
 echo AtlasTemplate=["'$AtlasTemplate'"] | cat - "$Subdir"/workspace/temp.m >> temp && mv temp "$Subdir"/workspace/temp.m # > /dev/null 2>&1 		
 echo SubcorticalLabels=["'$MEDIR/res0urces/FS/SubcorticalLabels.txt'"] | cat - "$Subdir"/workspace/temp.m >> temp && mv temp "$Subdir"/workspace/temp.m # > /dev/null 2>&1 		
 cd "$Subdir"/workspace/ # run script via Matlab 
-matlab -nodesktop -nosplash -r "temp; exit" # > /dev/null 2>&1 
+matlab -nodesktop -nosplash -nojvm -r "temp; exit" # > /dev/null 2>&1 
 
 # delete some files;
 rm -rf "$Subdir"/workspace/
@@ -264,5 +264,5 @@ cp -rf "$MEDIR"/res0urces/coreg_qa.m \
 echo "addpath(genpath('${MEDIR}'))" | cat - "$Subdir"/workspace/temp.m > temp && mv temp "$Subdir"/workspace/temp.m
 echo Subdir=["'$Subdir'"] | cat - "$Subdir"/workspace/temp.m >> temp && mv temp "$Subdir"/workspace/temp.m # > /dev/null 2>&1 		
 cd "$Subdir"/workspace/ # run script via Matlab 
-matlab -nodesktop -nosplash -r "temp; exit" # > /dev/null 2>&1
+matlab -nodesktop -nosplash -nojvm  -r "temp; exit" # > /dev/null 2>&1
 rm -rf "$Subdir"/workspace/ > /dev/null 2>&1
