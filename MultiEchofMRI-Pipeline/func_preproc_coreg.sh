@@ -252,11 +252,12 @@ cd "$Subdir" # go back to subject dir.
 # produce the best co-registeration / cross-scan allignment & 
 # then generate a movie summarizing the results 
 # Obs: This sometimes cause the container to hang forever or throw a java error. Will turn off the movie.
-# Probably this is a problem with running the container in a Mac
+# Probably this is a problem with running the container in a Mac M1. This persisted after taking of the video.
+# I have ported the code to a python function so that it generates the files used in the next step
 # fresh workspace dir.
 rm -rf "$Subdir"/workspace/
 mkdir "$Subdir"/workspace/ > /dev/null 
-
+/opt/miniconda-latest/envs/me_v10/bin/python /opt/Liston-Laboratory-MultiEchofMRI-Pipeline/Res0urces/coreg_rho.py ${Subdir}
 # create temporary CoregQA.m 
 #cp -rf "$MEDIR"/res0urces/coreg_qa.m \
 #"$Subdir"/workspace/temp.m

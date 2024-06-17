@@ -58,8 +58,8 @@ func () {
 	fslmaths "$1"/func/rest/"$6"/Rest_E1_acpc.nii.gz -Tmin "$1"/func/rest/"$6"/tmp.nii.gz # remove any negative values introduced by spline interpolation;
 	fslmaths "$1"/func/xfms/rest/T1w_acpc_brain_func.nii.gz -mas "$1"/func/rest/"$6"/tmp.nii.gz "$1"/func/rest/"$6"/brain_mask.nii.gz
 
-	# run the "tedana" workflow; 
-	tedana -d "$1"/func/rest/"$6"/Rest_E*_acpc.nii.gz -e $(cat "$1"/func/rest/"$6"/TE.txt) --out-dir "$1"/func/rest/"$6"/Tedana/ \
+	# run the "tedana" workflow; #Changed the call to explicitly use the python and binaries from the env as it was not always working with parallel.
+	/opt/miniconda-latest/envs/me_v10/bin/python /opt/miniconda-latest/envs/me_v10/bin/tedana -d "$1"/func/rest/"$6"/Rest_E*_acpc.nii.gz -e $(cat "$1"/func/rest/"$6"/TE.txt) --out-dir "$1"/func/rest/"$6"/Tedana/ \
 	--tedpca "$3" --fittype curvefit --mask "$1"/func/rest/"$6"/brain_mask.nii.gz --maxit "$4" --maxrestart "$5" --seed 42 \
     --convention orig --verbose --lowmem # specify more iterations / restarts to increase likelihood of ICA convergence (also increases possible runtime).
 
