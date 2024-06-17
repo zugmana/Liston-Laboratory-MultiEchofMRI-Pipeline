@@ -118,25 +118,25 @@ done
 # average SBref for cross-scan allignment 
 
 # build a list of all SBrefs;
-images=("$WDIR"/SBref_*.nii.gz)
-
+im=$(ls "$WDIR"/SBref_*.nii.gz)
+images=($im)
 # count images; average if needed  
 if [ "${#images[@]}" \> 1 ]; then
 
 	# align  and average the single-band reference (SBref) images;
 	"$MEDIR"/res0urces/FuncAverage -n -o "$Subdir"/func/xfms/rest/AvgSBref.nii.gz \
-	"$WDIR"/SBref_*.nii.gz # > /dev/null 2>&1 
+	${im}
 
 else
 
 	# copy over the lone single-band reference (SBref) image;
-	cp "${images[0]}" "$Subdir"/func/xfms/rest/AvgSBref.nii.gz > /dev/null 2>&1
+	cp "${images[0]}" "$Subdir"/func/xfms/rest/AvgSBref.nii.gz
 
 fi
 
 # create clean tmp. copy of freesurfer folder;
-rm -rf "$Subdir"/anat/T1w/freesurfer > /dev/null 2>&1
-cp -rf "$Subdir"/anat/T1w/"$Subject" "$Subdir"/anat/T1w/freesurfer > /dev/null 2>&1
+rm -rf "$Subdir"/anat/T1w/freesurfer
+cp -rf "$Subdir"/anat/T1w/"$Subject" "$Subdir"/anat/T1w/freesurfer
 
 # define the effective echo spacing;
 EchoSpacing=$(cat $Subdir/func/xfms/rest/EffectiveEchoSpacing.txt) 
@@ -165,7 +165,7 @@ invwarp -w "$Subdir"/func/xfms/rest/AvgSBref2nonlin_EpiReg+BBR_warp.nii.gz -o "$
 # (avg. field map vs. scan-specific) later on
 
 # create & define the "CoregQA" folder;
-mkdir -p "$Subdir"/func/qa/CoregQA > /dev/null 2>&1
+mkdir -p "$Subdir"/func/qa/CoregQA
 
 # count the number of sessions
 Sessions=("$Subdir"/func/rest/session_*)
@@ -254,8 +254,8 @@ cd "$Subdir" # go back to subject dir.
 # Obs: This sometimes cause the container to hang forever or throw a java error. Will turn off the movie.
 # Probably this is a problem with running the container in a Mac
 # fresh workspace dir.
-#rm -rf "$Subdir"/workspace/ > /dev/null 2>&1
-#mkdir "$Subdir"/workspace/ > /dev/null 2>&1
+rm -rf "$Subdir"/workspace/
+mkdir "$Subdir"/workspace/ > /dev/null 
 
 # create temporary CoregQA.m 
 #cp -rf "$MEDIR"/res0urces/coreg_qa.m \
@@ -263,7 +263,7 @@ cd "$Subdir" # go back to subject dir.
 
 # define some Matlab variables;
 #echo "addpath(genpath('${MEDIR}'))" | cat - "$Subdir"/workspace/temp.m > temp && mv temp "$Subdir"/workspace/temp.m
-#echo Subdir=["'$Subdir'"] | cat - "$Subdir"/workspace/temp.m >> temp && mv temp "$Subdir"/workspace/temp.m # > /dev/null 2>&1 		
+#echo Subdir=["'$Subdir'"] | cat - "$Subdir"/workspace/temp.m >> temp && mv temp "$Subdir"/workspace/temp.m 		
 #cd "$Subdir"/workspace/ # run script via Matlab 
-#matlab -nodesktop -nosplash -nojvm  -r "temp; exit" # > /dev/null 2>&1
+#matlab -nodesktop -nosplash -nojvm  -r "temp ; exit" # > /dev/null 2>&1
 #rm -rf "$Subdir"/workspace/ > /dev/null 2>&1

@@ -1,9 +1,9 @@
 #!/bin/bash
 # CJL; (cjl2007@med.cornell.edu)
 
-StudyFolder=$1 # location of Subject folder
-Subject=$2 # space delimited list of subject IDs
-NTHREADS=$3 # set number of threads; larger values will reduce runtime (but also increase RAM usage);
+export StudyFolder=$1 # location of Subject folder
+export Subject=$2 # space delimited list of subject IDs
+export NTHREADS=$3 # set number of threads; larger values will reduce runtime (but also increase RAM usage);
 echo "Starting functional pipeline for ${Subject}, in ${OrigStudyFolder}"
 # define the 
 # starting point 
@@ -26,11 +26,11 @@ mcr="/opt/mcr/v93"
 
 
 # define subject directory;
-Subdir="$StudyFolder"/"$Subject"
+export Subdir="$StudyFolder"/"$Subject"
 
 # define some directories containing 
 # custom matlab scripts and various atlas files;
-MEDIR="/opt/Liston-Laboratory-MultiEchofMRI-Pipeline/MultiEchofMRI-Pipeline"
+export MEDIR="/opt/Liston-Laboratory-MultiEchofMRI-Pipeline/MultiEchofMRI-Pipeline"
 
 # check to see if there's a symlink to res0urces here
 if ! [[ -e ${MEDIR}/res0urces ]]; then

@@ -118,28 +118,91 @@ RUN echo "Downloading ANTs ..." \
     && mv /opt/ants-2.4.3/bin/* /opt/ants-2.4.3 \
     && rm ants.zip
 RUN echo "Downloading Matlab..." \
-    && wget -q https://www.mathworks.com/mpm/glnxa64/mpm \
+    echo "Matlab dependencies:" \
+    && apt-get update -qq \
+    && apt-get install -y -q --no-install-recommends \
+    ca-certificates \
+    libasound2 \
+    libc6 \
+    libcairo-gobject2 \
+    libcairo2 \
+    libcap2 \
+    libcrypt-dev \
+    libcups2 \
+    libdrm2 \
+    libgbm1 \
+    libgdk-pixbuf2.0-0 \
+    libgl1 \
+    libglib2.0-0 \
+    libgstreamer-plugins-base1.0-0 \
+    libgstreamer1.0-0 \
+    libgtk-3-0 \
+    libice6 \
+    libltdl7 \
+    libnspr4 \
+    libnss3 \
+    libpam0g \
+    libpango-1.0-0 \
+    libpangocairo-1.0-0 \
+    libpangoft2-1.0-0 \
+    libsndfile1 \
+    libuuid1 \
+    libwayland-client0 \
+    libxcomposite1 \
+    libxcursor1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxft2 \
+    libxinerama1 \
+    libxrandr2 \
+    libxt6 \
+    libxtst6 \
+    libxxf86vm1 \
+    linux-libc-dev \
+    locales \
+    locales-all \
+    make \
+    net-tools \
+    procps \
+    sudo \
+    unzip \
+    wget \
+    zlib1g \
+    && rm -rf /var/lib/apt/lists/* 
+    RUN [ -d /usr/share/X11/xkb ] || mkdir -p /usr/share/X11/xkb
+    # Install patched glibc - See https://github.com/mathworks/build-glibc-bz-19329-patch
+    # Note: base-dependencies.txt includes wget, libcrypt-dev and linux-libc-dev to enable installation of patched -dev packages
+    WORKDIR /packages
+    RUN export DEBIAN_FRONTEND=noninteractive &&\
+        wget -q https://github.com/mathworks/build-glibc-bz-19329-patch/releases/download/ubuntu-focal/all-packages.tar.gz &&\
+        tar -x -f all-packages.tar.gz \
+            --exclude glibc-*.deb \
+            --exclude libc6-dbg*.deb &&\
+        apt-get install --yes --no-install-recommends ./*.deb &&\
+        rm -fr /packages
+    WORKDIR /
+    RUN wget -q https://www.mathworks.com/mpm/glnxa64/mpm \
     && chmod +x mpm \
     && ./mpm install \
-    --release=r2023a \
-    --destination=/opt/matlab/2023a \
+    --release=r2023b \
+    --destination=/opt/matlab/2023b \
     --products="MATLAB" \
     || (echo "MPM Installation Failure. See below for more information:" && cat /tmp/mathworks_root.log && false) \
     && ./mpm install \
-    --release=r2023a \
-    --destination=/opt/matlab/2023a \
+    --release=r2023b \
+    --destination=/opt/matlab/2023b \
     --products="Signal_Processing_Toolbox" \
     && ./mpm install \
-    --release=r2023a \
-    --destination=/opt/matlab/2023a \
+    --release=r2023b \
+    --destination=/opt/matlab/2023b \
     --products="Statistics_and_Machine_Learning_Toolbox" \
     && ./mpm install \
-    --release=r2023a \
-    --destination=/opt/matlab/2023a \
+    --release=r2023b \
+    --destination=/opt/matlab/2023b \
     --products="Image_Processing_Toolbox" \
     && ./mpm install \
-    --release=r2023a \
-    --destination=/opt/matlab/2023a \
+    --release=r2023b \
+    --destination=/opt/matlab/2023b \
     --products="Parallel_Computing_Toolbox" \
     && rm -f mpm /tmp/mathworks_root.log \
     && rm -f install_matlab.sh \
@@ -159,9 +222,7 @@ RUN echo "Downloading fix ..." \
 COPY install_packages.R /tmp/
 RUN Rscript /tmp/install_packages.R
 # Get the pipeline
-RUN echo "Downloading pipeline" \
-    && echo "" \
-    &&  git clone https://github.com/zugmana/Liston-Laboratory-MultiEchofMRI-Pipeline.git /opt/Liston-Laboratory-MultiEchofMRI-Pipeline \
+RUN git clone https://github.com/zugmana/Liston-Laboratory-MultiEchofMRI-Pipeline.git /opt/Liston-Laboratory-MultiEchofMRI-Pipeline \
     && cd /opt/Liston-Laboratory-MultiEchofMRI-Pipeline \
     && git checkout edb_template \
     && cd /opt/Liston-Laboratory-MultiEchofMRI-Pipeline/MultiEchofMRI-Pipeline \
@@ -207,6 +268,7 @@ RUN apt-get update -qq \
            "numpy" \
            "scikit-learn" \
            "scipy" \
+           "numpy" \
     && bash -c "source activate me_v10 \
     &&   python -m pip install --no-cache-dir  \
             "mapca" \
@@ -216,7 +278,7 @@ RUN apt-get update -qq \
     && rm -rf ~/.cache/pip/*
 
 # Update the PATH for Bash
-ENV PATH=$PATH:/opt/workbench:/opt/workbench/bin_linux64:/opt/Liston-Laboratory-MultiEchofMRI-Pipeline/MultiEchofMRI-Pipeline/:/opt/matlab/2023a/bin:/opt/ants-2.4.3
+ENV PATH=$PATH:/opt/workbench:/opt/workbench/bin_linux64:/opt/Liston-Laboratory-MultiEchofMRI-Pipeline/MultiEchofMRI-Pipeline/:/opt/matlab/2023b/bin:/opt/ants-2.4.3
 #Set ENV for HCPpipelines
 ENV MSMBINDIR="/opt/MSM/" \
     HCPPIPEDIR="/opt/HCPpipelines-4.7.0/" \

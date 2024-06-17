@@ -1,14 +1,14 @@
 #!/bin/bash
 # CJL; (cjl2007@med.cornell.edu)
 
-MEDIR=$1
-Subject=$2
-StudyFolder=$3
-Subdir="$StudyFolder"/"$Subject"
-AtlasTemplate=$4
-DOF=$5
+export MEDIR=$1
+export Subject=$2
+export StudyFolder=$3
+export Subdir="$StudyFolder"/"$Subject"
+export AtlasTemplate=$4
+export DOF=$5
 NTHREADS=$6
-StartSession=$7
+export StartSession=$7
 
 #testing to see if this will make parallel work consistentl
 export SHELL=$(type -p bash)
@@ -38,12 +38,13 @@ done
 
 # define a list of directories;
 AllScans=$(cat "$Subdir"/AllScans.txt) # note: this is used for parallel processing purposes.
+echo $AllScans
 rm "$Subdir"/AllScans.txt # remove intermediate file;
 
 func () {
 
 	# clean up some folders;
-	rm -rf "$3"/func/rest/"$5"/MCF > /dev/null 2>&1 # in case there is a previous folder left over;
+	rm -rf "$3"/func/rest/"$5"/MCF #> /dev/null 2>&1 # in case there is a previous folder left over;
 	mkdir "$3"/func/rest/"$5"/vols/
 
 	# define some acq. parameters;
@@ -172,7 +173,7 @@ func () {
 	done
 
 	# rename mcflirt transform dir.;
-	rm -rf "$3"/func/rest/"$5"/MCF > /dev/null 2>&1
+	rm -rf "$3"/func/rest/"$5"/MCF #> /dev/null 2>&1
 	mv "$3"/func/rest/"$5"/*_mcf*.mat "$3"/func/rest/"$5"/MCF
 
 	# use the first echo (w/ least amount of signal dropout) to estimate bias field;
