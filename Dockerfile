@@ -222,7 +222,9 @@ RUN echo "Downloading fix ..." \
 COPY install_packages.R /tmp/
 RUN Rscript /tmp/install_packages.R
 # Get the pipeline
-RUN git clone https://github.com/zugmana/Liston-Laboratory-MultiEchofMRI-Pipeline.git /opt/Liston-Laboratory-MultiEchofMRI-Pipeline \
+RUN echo "Downloading pipeline" \
+    && echo "" \
+    && git clone https://github.com/zugmana/Liston-Laboratory-MultiEchofMRI-Pipeline.git /opt/Liston-Laboratory-MultiEchofMRI-Pipeline \
     && cd /opt/Liston-Laboratory-MultiEchofMRI-Pipeline \
     && git checkout edb_template \
     && cd /opt/Liston-Laboratory-MultiEchofMRI-Pipeline/MultiEchofMRI-Pipeline \
