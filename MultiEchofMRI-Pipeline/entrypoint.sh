@@ -72,7 +72,7 @@ if [ -n "$processing_flag" ] && [ -n "$arg_p" ] && [ -n "$arg_d" ] && [ -n "$arg
       echo "Executing all script with arguments: $arg_p $arg_d $arg_c"
       anat_highres_HCP_wrapper_par.sh $arg_d $arg_p $arg_c
       func_preproc+denoise_ME-fMRI_wrapper.sh $arg_d $arg_p $arg_c
-      func_smooth_subcort_concat.sh /opt/Liston-Laboratory-MultiEchofMRI-Pipeline $arg_p $arg_d
+      #func_smooth_subcort_concat.sh /opt/Liston-Laboratory-MultiEchofMRI-Pipeline $arg_p $arg_d
       ;;
   esac
 else

@@ -140,7 +140,7 @@ func () {
 
 		# perform slice time correction using custom timing file;
 		slicetimer -i "$3"/func/rest/"$5"/Rest_E"$e".nii.gz \
-		--tcustom="$3"/func/rest/"$5"/slice_times.txt \
+		--tcustom="$3"/func/rest/"$5"/SliceTiming.txt  \
 		-r $tr -o "$3"/func/rest/"$5"/Rest_E"$e".nii.gz
 
 		# split original data into individual volumes;

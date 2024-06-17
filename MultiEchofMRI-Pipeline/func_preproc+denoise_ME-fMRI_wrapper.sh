@@ -82,10 +82,11 @@ echo "$MEDIR"/func_preproc_headmotion.sh "$MEDIR" "$Subject" "$StudyFolder" \
 echo -e "Performing Signal-Decay Based Denoising"
 
 # perform signal-decay denoising; 
-echo "$MEDIR"/func_denoise_meica.sh "$Subject" "$StudyFolder" "$NTHREADS" \
+#only allowing one process for tedana due to memory issue
+echo "$MEDIR"/func_denoise_meica.sh "$Subject" "$StudyFolder" 1 \
 "$MEPCA" "$MaxIterations" "$MaxRestarts" "$StartSession"
 
-"$MEDIR"/func_denoise_meica.sh "$Subject" "$StudyFolder" "$NTHREADS" \
+"$MEDIR"/func_denoise_meica.sh "$Subject" "$StudyFolder" 1 \
 "$MEPCA" "$MaxIterations" "$MaxRestarts" "$StartSession"
 
 echo -e "Removing Spatially Diffuse Noise via MGTR"

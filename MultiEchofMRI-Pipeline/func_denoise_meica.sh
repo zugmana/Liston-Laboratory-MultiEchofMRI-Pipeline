@@ -38,12 +38,12 @@ done
 
 # hardcode tedana path 
 # TODO: fix this
-export PATH=/data/MLDSST/nielsond/target_test/other_repos/for_tedana/bin:$PATH
+#export PATH=/data/MLDSST/nielsond/target_test/other_repos/for_tedana/bin:$PATH
 
 
 # define a list of directories;
 DataDirs=$(cat "$Subdir"/DataDirs.txt) # note: this is used for parallel processing purposes.
-rm "$Subdir"/DataDirs.txt # remove intermediate file;
+#rm "$Subdir"/DataDirs.txt # remove intermediate file;
 source activate me_v10
 # Note: that in the make_adaptive_mask function in utils.py, following change is made... 
 # masksum = (np.abs(echo_means) > lthrs).sum(axis=-1) <-- this is the original code in Tedana; uses an arbitrary 33rd percentile cutoff. 
@@ -52,7 +52,7 @@ source activate me_v10
 func () {
 
 	# remove any existing Tedana dirs.;
-	rm -rf "$1"/func/rest/"$6"/Tedana* > /dev/null 2>&1 
+	rm -rf "$1"/func/rest/"$6"/Tedana*  
 
 	# make sure that the explicit brain mask and T2* map match; 
 	fslmaths "$1"/func/rest/"$6"/Rest_E1_acpc.nii.gz -Tmin "$1"/func/rest/"$6"/tmp.nii.gz # remove any negative values introduced by spline interpolation;
@@ -64,12 +64,12 @@ func () {
     --convention orig --verbose --lowmem # specify more iterations / restarts to increase likelihood of ICA convergence (also increases possible runtime).
 
 	# # remove temporary files;
-	rm "$1"/func/rest/"$6"/brain_mask.nii.gz
-	rm "$1"/func/rest/"$6"/tmp.nii.gz
+	#rm "$1"/func/rest/"$6"/brain_mask.nii.gz
+	#rm "$1"/func/rest/"$6"/tmp.nii.gz
 
 	# move some files;
-	mv "$1"/func/rest/"$6"/Tedana/ts_OC.nii.gz "$1"/func/rest/"$6"/Rest_OCME.nii.gz # optimally combined time-series;
-	mv "$1"/func/rest/"$6"/Tedana/dn_ts_OC.nii.gz "$1"/func/rest/"$6"/Rest_OCME+MEICA.nii.gz # multi-echo denoised time-series;
+	ln -s "$1"/func/rest/"$6"/Tedana/ts_OC.nii.gz "$1"/func/rest/"$6"/Rest_OCME.nii.gz # optimally combined time-series;
+	ln -s "$1"/func/rest/"$6"/Tedana/dn_ts_OC.nii.gz "$1"/func/rest/"$6"/Rest_OCME+MEICA.nii.gz # multi-echo denoised time-series;
 
 	# make some folders for manual 
 	# acceptance / rejection of ICA components; 
@@ -127,7 +127,7 @@ func () {
 		wb_command -cifti-create-dense-timeseries "$1"/func/rest/"$6"/Tedana/"$i".dtseries.nii -volume "$1"/func/rest/"$6"/Tedana/"$i".nii.gz "$1"/func/rois/Subcortical_ROIs_acpc.nii.gz \
 		-left-metric "$1"/func/rest/"$6"/Tedana/lh.32k_fs_LR.shape.gii -roi-left "$1"/anat/MNINonLinear/fsaverage_LR32k/"$2".L.atlasroi.32k_fs_LR.shape.gii \
 		-right-metric "$1"/func/rest/"$6"/Tedana/rh.32k_fs_LR.shape.gii -roi-right "$1"/anat/MNINonLinear/fsaverage_LR32k/"$2".R.atlasroi.32k_fs_LR.shape.gii 
-		rm "$1"/func/rest/"$6"/Tedana/*shape* # remove left over files 
+		#rm "$1"/func/rest/"$6"/Tedana/*shape* # remove left over files 
 
 	done
 

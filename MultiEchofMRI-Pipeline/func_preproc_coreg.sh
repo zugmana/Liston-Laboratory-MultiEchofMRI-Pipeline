@@ -229,8 +229,8 @@ fslmaths "$Subdir"/func/xfms/rest/T1w_nonlin_brain_func.nii.gz -bin "$Subdir"/fu
 rm -rf "$Subdir"/anat/T1w/freesurfer/ 
 
 # fresh workspace dir.
-rm -rf "$Subdir"/workspace/ > /dev/null 2>&1
-mkdir "$Subdir"/workspace/ > /dev/null 2>&1
+rm -rf "$Subdir"/workspace/
+mkdir "$Subdir"/workspace/
 
 # create temp. make_precise_subcortical_labels.m 
 cp -rf "$MEDIR"/res0urces/make_precise_subcortical_labels.m \
@@ -255,8 +255,8 @@ cd "$Subdir" # go back to subject dir.
 # Probably this is a problem with running the container in a Mac M1. This persisted after taking of the video.
 # I have ported the code to a python function so that it generates the files used in the next step
 # fresh workspace dir.
-rm -rf "$Subdir"/workspace/
-mkdir "$Subdir"/workspace/ > /dev/null 
+#rm -rf "$Subdir"/workspace/
+mkdir "$Subdir"/workspace/ 
 /opt/miniconda-latest/envs/me_v10/bin/python /opt/Liston-Laboratory-MultiEchofMRI-Pipeline/Res0urces/coreg_rho.py ${Subdir}
 # create temporary CoregQA.m 
 #cp -rf "$MEDIR"/res0urces/coreg_qa.m \
