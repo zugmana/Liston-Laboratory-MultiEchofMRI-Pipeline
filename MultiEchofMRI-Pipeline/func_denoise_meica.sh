@@ -52,8 +52,9 @@ source activate me_v10
 func () {
 
 	# remove any existing Tedana dirs.;
-	if [ ! -d "${1}/func/rest/${6}/Tedana" ]; then echo "No previous Tedana found in ${6}." ; else ; echo "Removing previous Tedana run" ; rm -rf "${1}/func/rest/${6}/Tedana" ; fi
+	if [ ! -d "${1}/func/rest/${6}/Tedana" ]; then echo "No previous Tedana found in ${6}." ; else  echo "Removing previous Tedana run" ; rm -rf "${1}/func/rest/${6}/Tedana" ; fi
 	
+
 	# make sure that the explicit brain mask and T2* map match; 
 	fslmaths "$1"/func/rest/"$6"/Rest_E1_acpc.nii.gz -Tmin "$1"/func/rest/"$6"/tmp.nii.gz # remove any negative values introduced by spline interpolation;
 	fslmaths "$1"/func/xfms/rest/T1w_acpc_brain_func.nii.gz -mas "$1"/func/rest/"$6"/tmp.nii.gz "$1"/func/rest/"$6"/brain_mask.nii.gz
