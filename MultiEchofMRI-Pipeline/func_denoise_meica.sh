@@ -135,5 +135,5 @@ func () {
 
 export -f func # run tedana;
 #parallel --jobs $NTHREADS func ::: $Subdir ::: $Subject ::: $MEPCA ::: $MaxIterations ::: $MaxRestarts ::: $DataDirs # > /dev/null 2>&1
-for i in ${DataDirs}; do echo "starting Tedana on ${i}" ; func ${Subdir} ${Subject} ${MEPCA} ${MaxIterations} ${MaxRestarts} ${DataDirs} ${i} ; done
+for i in ${DataDirs}; do echo "starting Tedana on ${i}" ; func ${Subdir} ${Subject} ${MEPCA} ${MaxIterations} ${MaxRestarts} ${i} ; done
 rm "$Subdir"/DataDirs.txt  
