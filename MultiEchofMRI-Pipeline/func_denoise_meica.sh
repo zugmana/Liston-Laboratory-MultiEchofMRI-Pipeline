@@ -52,8 +52,13 @@ source activate me_v10
 func () {
 
 	# remove any existing Tedana dirs.;
-	rm -rf "$1"/func/rest/"$6"/Tedana*  
-
+	if [ ! -d "${1}/func/rest/${6}/Tedana" ]; then
+    echo "No previous Tedana found in ${6}."
+    else
+    echo "Removing previous Tedana run"
+    rm -rf "${1}/func/rest/${6}/Tedana"  
+    fi
+	
 	# make sure that the explicit brain mask and T2* map match; 
 	fslmaths "$1"/func/rest/"$6"/Rest_E1_acpc.nii.gz -Tmin "$1"/func/rest/"$6"/tmp.nii.gz # remove any negative values introduced by spline interpolation;
 	fslmaths "$1"/func/xfms/rest/T1w_acpc_brain_func.nii.gz -mas "$1"/func/rest/"$6"/tmp.nii.gz "$1"/func/rest/"$6"/brain_mask.nii.gz
@@ -68,8 +73,8 @@ func () {
 	#rm "$1"/func/rest/"$6"/tmp.nii.gz
 
 	# move some files;
-	ln -s "$1"/func/rest/"$6"/Tedana/ts_OC.nii.gz "$1"/func/rest/"$6"/Rest_OCME.nii.gz # optimally combined time-series;
-	ln -s "$1"/func/rest/"$6"/Tedana/dn_ts_OC.nii.gz "$1"/func/rest/"$6"/Rest_OCME+MEICA.nii.gz # multi-echo denoised time-series;
+	cp "$1"/func/rest/"$6"/Tedana/ts_OC.nii.gz "$1"/func/rest/"$6"/Rest_OCME.nii.gz # optimally combined time-series;
+	cp "$1"/func/rest/"$6"/Tedana/dn_ts_OC.nii.gz "$1"/func/rest/"$6"/Rest_OCME+MEICA.nii.gz # multi-echo denoised time-series;
 
 	# make some folders for manual 
 	# acceptance / rejection of ICA components; 
@@ -134,4 +139,5 @@ func () {
 }
 
 export -f func # run tedana;
-parallel --jobs $NTHREADS func ::: $Subdir ::: $Subject ::: $MEPCA ::: $MaxIterations ::: $MaxRestarts ::: $DataDirs # > /dev/null 2>&1
+#parallel --jobs $NTHREADS func ::: $Subdir ::: $Subject ::: $MEPCA ::: $MaxIterations ::: $MaxRestarts ::: $DataDirs # > /dev/null 2>&1
+for i in ${DataDirs}; do echo "starting Tedana on ${i} ; func ${Subdir} ${Subject} ${MEPCA} ${MaxIterations} ${MaxRestarts} ${DataDirs} ${i} ; done

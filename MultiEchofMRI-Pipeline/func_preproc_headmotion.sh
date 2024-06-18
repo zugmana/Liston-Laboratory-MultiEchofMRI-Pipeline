@@ -199,7 +199,7 @@ func () {
 
 export -f func # correct for head motion and warp to atlas space in single spline warp
 parallel --jobs $NTHREADS func ::: $MEDIR ::: $AtlasTemplate ::: $Subdir ::: $DOF ::: $AllScans  
-
+echo "Done headmotion step!"
 # finally, calculate frame-wise displacement and generate stop-motion movies 
 # summarizing motion and respiration parameters and show minimally preprocessed images;
 
