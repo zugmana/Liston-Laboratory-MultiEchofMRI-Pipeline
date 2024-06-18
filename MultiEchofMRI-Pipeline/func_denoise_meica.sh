@@ -52,12 +52,7 @@ source activate me_v10
 func () {
 
 	# remove any existing Tedana dirs.;
-	if [ ! -d "${1}/func/rest/${6}/Tedana" ]; then
-    echo "No previous Tedana found in ${6}."
-    else
-    echo "Removing previous Tedana run"
-    rm -rf "${1}/func/rest/${6}/Tedana"  
-    fi
+	if [ ! -d "${1}/func/rest/${6}/Tedana" ]; then echo "No previous Tedana found in ${6}." ; else ; echo "Removing previous Tedana run" ; rm -rf "${1}/func/rest/${6}/Tedana" ; fi
 	
 	# make sure that the explicit brain mask and T2* map match; 
 	fslmaths "$1"/func/rest/"$6"/Rest_E1_acpc.nii.gz -Tmin "$1"/func/rest/"$6"/tmp.nii.gz # remove any negative values introduced by spline interpolation;
@@ -140,4 +135,5 @@ func () {
 
 export -f func # run tedana;
 #parallel --jobs $NTHREADS func ::: $Subdir ::: $Subject ::: $MEPCA ::: $MaxIterations ::: $MaxRestarts ::: $DataDirs # > /dev/null 2>&1
-for i in ${DataDirs}; do echo "starting Tedana on ${i} ; func ${Subdir} ${Subject} ${MEPCA} ${MaxIterations} ${MaxRestarts} ${DataDirs} ${i} ; done
+for i in ${DataDirs}; do echo "starting Tedana on ${i}" ; func ${Subdir} ${Subject} ${MEPCA} ${MaxIterations} ${MaxRestarts} ${DataDirs} ${i} ; done
+rm "$Subdir"/DataDirs.txt  
