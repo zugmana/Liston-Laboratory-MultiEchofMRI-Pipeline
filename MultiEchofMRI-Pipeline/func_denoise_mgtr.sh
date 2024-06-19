@@ -37,7 +37,7 @@ for s in $sessions ; do
 		echo "addpath(genpath('${MEDIR}'))" | cat - "$Subdir"/workspace/temp.m >> temp && mv temp "$Subdir"/workspace/temp.m
 
 		cd "$Subdir"/workspace/ # perform mgtr using Matlab
-		matlab -nodesktop -nosplash -nojvm -r "temp; exit" > /dev/null 2>&1	 
+		matlab -nodesktop -nosplash -r "temp ; exit"  
 		rm "$Subdir"/workspace/temp.m # 
 
 	done

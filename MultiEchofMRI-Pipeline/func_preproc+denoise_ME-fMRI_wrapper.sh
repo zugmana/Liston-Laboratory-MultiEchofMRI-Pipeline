@@ -23,7 +23,8 @@ fi
 # setup mcr
 ver=v93
 mcr="/opt/mcr/v93"
-
+#sometimes matlab doesnt work without this...
+export HOME=${StudyFolder}
 
 # define subject directory;
 export Subdir="$StudyFolder"/"$Subject"

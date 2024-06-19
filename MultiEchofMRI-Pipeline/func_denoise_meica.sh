@@ -43,7 +43,7 @@ done
 
 # define a list of directories;
 DataDirs=$(cat "$Subdir"/DataDirs.txt) # note: this is used for parallel processing purposes.
-#rm "$Subdir"/DataDirs.txt # remove intermediate file;
+rm "$Subdir"/DataDirs.txt # remove intermediate file;
 source activate me_v10
 # Note: that in the make_adaptive_mask function in utils.py, following change is made... 
 # masksum = (np.abs(echo_means) > lthrs).sum(axis=-1) <-- this is the original code in Tedana; uses an arbitrary 33rd percentile cutoff. 
@@ -137,4 +137,4 @@ func () {
 export -f func # run tedana;
 #parallel --jobs $NTHREADS func ::: $Subdir ::: $Subject ::: $MEPCA ::: $MaxIterations ::: $MaxRestarts ::: $DataDirs # > /dev/null 2>&1
 for i in ${DataDirs}; do echo "starting Tedana on ${i}" ; func ${Subdir} ${Subject} ${MEPCA} ${MaxIterations} ${MaxRestarts} ${i} ; done
-rm "$Subdir"/DataDirs.txt  
+#rm "$Subdir"/DataDirs.txt  
