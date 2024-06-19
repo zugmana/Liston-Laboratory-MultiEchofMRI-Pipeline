@@ -52,7 +52,7 @@ source activate me_v10
 func () {
 
 	# remove any existing Tedana dirs.;
-	if [ ! -d "${1}/func/rest/${6}/Tedana" ]; then echo "No previous Tedana found in ${6}." ; else  echo "Removing previous Tedana run" ; rm -rf "${1}/func/rest/${6}/Tedana" ; fi
+	if [ ! -d "${1}/func/rest/${6}/Tedana" ]; then echo "No previous Tedana found in ${6}." ; else echo "Removing previous Tedana run" ; rm -rf "${1}/func/rest/${6}/Tedana" ; fi
 	
 
 	# make sure that the explicit brain mask and T2* map match; 
