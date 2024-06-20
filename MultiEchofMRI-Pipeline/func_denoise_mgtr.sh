@@ -14,7 +14,7 @@ mkdir "$Subdir"/workspace/ > /dev/null 2>&1
 # count the number of sessions
 sessions=("$Subdir"/func/rest/session_*)
 sessions=$(seq $StartSession 1 "${#sessions[@]}")
-
+export HOME=${StudyFolder}
 # sweep the sessions;
 for s in $sessions ; do
 
