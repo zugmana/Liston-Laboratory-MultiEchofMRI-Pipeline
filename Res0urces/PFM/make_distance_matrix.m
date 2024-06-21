@@ -34,10 +34,10 @@ LH_mats = zeros(length(LH_verts), length(LH_verts), "uint16");
 RH_mats = zeros(length(RH_verts), length(RH_verts), "uint16");
 
 % start parpool;
-%pool = parpool('local',nThreads);
+pool = parpool('local',nThreads);
 
 % sweep through vertices
-for i = 1:length(LH_verts)
+parfor i = 1:length(LH_verts)
     
     % calculate geodesic distances from vertex i
     system(['wb_command -surface-geodesic-distance ' MidthickSurfs{1} ' ' num2str(LH_verts(i)-1) ' ' OutDir '/tmp/temp_' num2str(i) '.shape.gii']);
@@ -48,7 +48,7 @@ for i = 1:length(LH_verts)
 end
 
 % sweep through vertices
-for i = 1:length(RH_verts)
+parfor i = 1:length(RH_verts)
     
     % calculate geodesic distances from vertex i
     system(['wb_command -surface-geodesic-distance ' MidthickSurfs{2} ' ' num2str(RH_verts(i)-1) ' ' OutDir '/tmp/temp_' num2str(i) '.shape.gii']);
@@ -60,7 +60,7 @@ end
 
 % delete 
 % parpool
-%delete(pool);
+delete(pool);
 
 % remove temp dir.;
 [~,~]=system(['rm -rf ' OutDir '/tmp/']);
